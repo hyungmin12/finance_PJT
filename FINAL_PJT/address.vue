@@ -1,19 +1,10 @@
 <template>
   <div>
     <div>
-      <input v-model="searchKeyword" placeholder="주소를 검색하세요" />
+      <input v-model="searchKeyword" placeholder="은행을 검색하세요" />
       <button @click="search">검색</button>
     </div>
     <div ref="map" style="width: 100%; height: 350px;"></div>
-    <div v-if="searchedBanks.length > 0">
-      <h2>검색된 은행</h2>
-      <ul>
-        <li v-for="bank in searchedBanks" :key="bank.id">
-          {{ bank.place_name }} - {{ bank.address_name }}
-        </li>
-      </ul>
-    </div>
-    
   </div>
 </template>
 
@@ -24,8 +15,6 @@ export default {
       map: null,
       infowindow: null,
       searchKeyword: '',
-      searchKeyword2: '',
-      searchedBanks: [],
     };
   },
   mounted() {
@@ -60,45 +49,20 @@ export default {
       }
     },
     search() {
-  if (this.searchKeyword) {
-    const geocoder = new window.kakao.maps.services.Geocoder();
-    geocoder.addressSearch(this.searchKeyword, (result, status) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-        this.clearMarkers(); // 기존 마커 제거
-        this.displayMarker(coords, result[0]);
-        this.map.setCenter(coords); // 지도의 중심을 결과값으로 받은 위치로 이동
-
-        // 검색 결과 초기화
-        this.searchedBanks = [];
-
-        const ps = new window.kakao.maps.services.Places(this.map);
-        ps.categorySearch('BK9', this.placesSearchCB, { useMapBounds: true });
-      } else {
-        alert('주소 검색 실패');
+      if (this.searchKeyword) {
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        geocoder.addressSearch(this.searchKeyword, (result, status) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+            this.clearMarkers(); // 기존 마커 제거
+            this.displayMarker(coords, result[0]);
+            this.map.setCenter(coords); // 지도의 중심을 결과값으로 받은 위치로 이동
+          } else {
+            alert('주소 검색 실패');
+          }
+        });
       }
-    });
-  }
-},
-    placesSearchCB(data, status, pagination) {
-  if (status === window.kakao.maps.services.Status.OK) {
-    const bounds = new window.kakao.maps.LatLngBounds();
-
-    for (let i = 0; i < data.length; i++) {
-      const coords = new window.kakao.maps.LatLng(data[i].y, data[i].x);
-      this.displayMarker(coords, data[i]);
-      bounds.extend(coords);
-
-      this.searchedBanks.push({
-        id: data[i].id,
-        place_name: data[i].place_name,
-        address_name: data[i].address_name,
-      });
-    }
-
-    this.map.setBounds(bounds);
-  }
-},
+    },
     displayMarker(place, data) {
       const marker = new window.kakao.maps.Marker({
         map: this.map,
@@ -108,9 +72,8 @@ export default {
       window.kakao.maps.event.addListener(marker, 'click', () => {
         this.infowindow.setContent(
           '<div style="padding:5px;font-size:12px;">' +
-            data.place_name +
             data.address_name +
-          '</div>'
+            '</div>'
         );
         this.infowindow.open(this.map, marker);
       });
