@@ -3,6 +3,8 @@ import ArticleView from '@/views/ArticleView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import LogInView from '@/views/LogInView.vue'
 import HomeView from '@/views/HomeView.vue'
+import DepositListView from '@/views/DepositListView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,7 +28,12 @@ const router = createRouter({
       path: '/login',
       name: 'LogInView',
       component: LogInView
-    }
+    },
+    {
+      path: '/depositList',
+      name: 'DepositListView',
+      component: DepositListView
+    },
   ]
 })
 

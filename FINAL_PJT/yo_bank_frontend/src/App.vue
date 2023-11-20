@@ -14,9 +14,9 @@
     <nav>
       <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
       <RouterLink :to="{ name: 'LogInView' }">LogIn</RouterLink>
-
-      <button @click="click_exchange">환율 계산</button>
+      <RouterLink :to="{ name: 'DepositListView'}">DepositList</RouterLink>
     </nav>
+    
   </header>
   <RouterView />
 </template>
@@ -26,16 +26,11 @@ import { RouterLink, RouterView } from 'vue-router'
 import { useCounterStore } from '@/stores/counter'
 import ExchangeComponents from '@/components/ExchangeComponents.vue'
 import KakaoMapComponents from '@/components/KakaoMapComponents.vue'
+
 import axios from 'axios'
 
 const store = useCounterStore()
 
-
-const click_exchange = function() {
-  // console.log(store.exchange_data)
-  console.log(store.exchange_data[0].ttb)
-  console.log(store.exchange_data[1].ttb)
-}
 
 
 </script>
