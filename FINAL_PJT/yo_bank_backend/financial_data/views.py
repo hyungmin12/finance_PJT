@@ -1,20 +1,29 @@
 from django.shortcuts import render
 from django.conf import settings
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 import requests
 import datetime
-from .serializers import DepositOptionsSerializer,DepositProductSerializer,SubscribedProductSerializer, DepositProductWithOptionsSerializer
-from .models import DepositOptions,DepositProduct,SubscribedProduct
+from .serializers import (
+    DepositOptionsSerializer,
+    DepositProductSerializer,
+    SubscribedProductSerializer,
+    DepositProductWithOptionsSerializer,
+)
+from .models import DepositOptions, DepositProduct, SubscribedProduct
 from django.http import JsonResponse
 from rest_framework import status
 from accounts.models import User
+from django.contrib.auth.decorators import login_required
+
 # from django.shortcuts import get_list_or_404
 
 # bfb3b88bf28e201b6a11b0ddadcdc8c9
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 # @permission_classes([IsAuthenticated])
 def deposit_product_list(request):
     deposit_products = DepositProduct.objects.all()
@@ -22,18 +31,18 @@ def deposit_product_list(request):
     return Response(serializer.data)
 
 
-
-@api_view(['GET'])
+@api_view(["GET"])
 def index(request):
-    api_key = 'bfb3b88bf28e201b6a11b0ddadcdc8c9'
-    url = f'http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json?auth={api_key}&topFinGrpNo=020000&pageNo=1'
+    api_key = "bfb3b88bf28e201b6a11b0ddadcdc8c9"
+    url = f"http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json?auth={api_key}&topFinGrpNo=020000&pageNo=1"
     response = requests.get(url).json()
 
     return Response(response)
 
+
 def save_deposit_data(request):
-    api_key = 'bfb3b88bf28e201b6a11b0ddadcdc8c9'
-    url = f'http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json?auth={api_key}&topFinGrpNo=020000&pageNo=1'
+    api_key = "bfb3b88bf28e201b6a11b0ddadcdc8c9"
+    url = f"http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json?auth={api_key}&topFinGrpNo=020000&pageNo=1"
     records = DepositProduct.objects.all()
     records.delete()
     records2 = DepositOptions.objects.all()
@@ -41,20 +50,20 @@ def save_deposit_data(request):
     response = requests.get(url).json()
     baseList = response.get("result").get("baseList")
     optionList = response.get("result").get("optionList")
-    
+
     for idx in range(len(baseList)):
         save_basedata = {
-            'fin_co_no': baseList[idx]['fin_co_no'],
-            'fin_prdt_cd': baseList[idx]['fin_prdt_cd'],
-            'kor_co_nm': baseList[idx]['kor_co_nm'],
-            'fin_prdt_nm': baseList[idx]['fin_prdt_nm'],
-            'join_deny': baseList[idx]['join_deny'],
-            'join_member': baseList[idx]['join_member'],
-            'join_way': baseList[idx]['join_way'],
-            'spcl_cnd': baseList[idx]['spcl_cnd'],
-            'max_limit': baseList[idx]['max_limit'],
-            'etc_note': baseList[idx]['etc_note'],
-            'dcls_end_day': baseList[idx]['dcls_end_day'],
+            "fin_co_no": baseList[idx]["fin_co_no"],
+            "fin_prdt_cd": baseList[idx]["fin_prdt_cd"],
+            "kor_co_nm": baseList[idx]["kor_co_nm"],
+            "fin_prdt_nm": baseList[idx]["fin_prdt_nm"],
+            "join_deny": baseList[idx]["join_deny"],
+            "join_member": baseList[idx]["join_member"],
+            "join_way": baseList[idx]["join_way"],
+            "spcl_cnd": baseList[idx]["spcl_cnd"],
+            "max_limit": baseList[idx]["max_limit"],
+            "etc_note": baseList[idx]["etc_note"],
+            "dcls_end_day": baseList[idx]["dcls_end_day"],
         }
 
         baseserializer = DepositProductSerializer(data=save_basedata)
@@ -62,21 +71,19 @@ def save_deposit_data(request):
             baseserializer.save()
 
     for idx in range(len(optionList)):
-        save_optiondata={
-            'deposit_product': optionList[idx]['fin_prdt_cd'],
-            'intr_rate_type': optionList[idx]['intr_rate_type'],
-            'intr_rate_type_nm': optionList[idx]['intr_rate_type_nm'],
-            'save_trm': optionList[idx]['save_trm'],
-            'intr_rate': optionList[idx]['intr_rate'],
-            'intr_rate2': optionList[idx]['intr_rate2'],
+        save_optiondata = {
+            "deposit_product": optionList[idx]["fin_prdt_cd"],
+            "intr_rate_type": optionList[idx]["intr_rate_type"],
+            "intr_rate_type_nm": optionList[idx]["intr_rate_type_nm"],
+            "save_trm": optionList[idx]["save_trm"],
+            "intr_rate": optionList[idx]["intr_rate"],
+            "intr_rate2": optionList[idx]["intr_rate2"],
         }
         optionserializer = DepositOptionsSerializer(data=save_optiondata)
         if optionserializer.is_valid(raise_exception=True):
             optionserializer.save()
-            
-        
-    return JsonResponse({'message': 'okay'})
 
+    return JsonResponse({"message": "okay"})
 
 
 # def save_saving_data(request):
@@ -128,30 +135,32 @@ def save_deposit_data(request):
 #     return JsonResponse({'message': 'okay'})
 
 
+@permission_classes([IsAuthenticatedOrReadOnly])
+@api_view(["POST"])
+@login_required
 def signup_deposit(request, option_pk):
-    user=User.objects.get(pk=1)
-    print("asdfasf-==================================")
-    depositOption = DepositOptions.objects.get(pk=option_pk)
-    print("asdfasf-=============밑으로 감!!!!!!!!!!!!!!!!!!!!!!!!!=====================")
+    # if request.method == 'GET':
+    user = request.user
+    depositOption = DepositOptions.objects.get(id=option_pk)
     deposit_product_instance = depositOption.deposit_product
+    if SubscribedProduct.objects.filter(fin_prdt_cd=deposit_product_instance.fin_prdt_cd, save_trm=depositOption.save_trm):
+        return JsonResponse({'message': 'already'})
     save_data = {
-            'type': 'S',
-            'fin_prdt_cd': deposit_product_instance.fin_prdt_cd,
-            'kor_co_nm': deposit_product_instance.kor_co_nm,
-            'fin_prdt_nm': deposit_product_instance.fin_prdt_nm,
-            'max_limit': deposit_product_instance.max_limit,
-            'amount': 50000,
-            'dcls_end_day': deposit_product_instance.dcls_end_day,
-            'intr_rate_type': depositOption.intr_rate_type,
-            'intr_rate_type_nm': depositOption.intr_rate_type_nm,
-            'save_trm': depositOption.save_trm,
-            'intr_rate': depositOption.intr_rate,
-            'intr_rate2': depositOption.intr_rate2,
+        "type": "S",
+        "fin_prdt_cd": deposit_product_instance.fin_prdt_cd,
+        "kor_co_nm": deposit_product_instance.kor_co_nm,
+        "fin_prdt_nm": deposit_product_instance.fin_prdt_nm,
+        "max_limit": deposit_product_instance.max_limit,
+        "amount": 50000,
+        "dcls_end_day": deposit_product_instance.dcls_end_day,
+        "intr_rate_type": depositOption.intr_rate_type,
+        "intr_rate_type_nm": depositOption.intr_rate_type_nm,
+        "save_trm": depositOption.save_trm,
+        "intr_rate": depositOption.intr_rate,
+        "intr_rate2": depositOption.intr_rate2,
     }
     serializer = SubscribedProductSerializer(data=save_data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=user)
-        print('abcd',save_data)
-        return JsonResponse({'message': 'okay'})
-    else:
-        print('bcsd',save_data)
+        return JsonResponse({"message": "okay"})
+    

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'financial_product_recommendations',
     'financial_data',
     'accounts',
+    'articles',
 
 
     'rest_framework',

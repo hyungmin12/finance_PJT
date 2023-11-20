@@ -8,6 +8,21 @@ export const useProductStore = defineStore('product', () => {
   const deposits = ref([])
   const USER_API = 'http://127.0.0.1:8000'
 
+  const getDeposititem = function(){
+    axios({
+      method:"get",
+      url:"http://127.0.0.1:8000/financial_data/save-deposit-data/"
+    })
+    .then((res)=>{
+      // console.log("o")
+      console.log("get_deposit_item")
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
+
   const getDepositList = function(){
     axios({
       method:"get",
@@ -21,7 +36,11 @@ export const useProductStore = defineStore('product', () => {
     })
   }
 
+  const changeDeposits = computed(()=>{
+    return deposits.value
+  })
 
 
-  return { getDepositList, deposits }
+
+  return { getDepositList, getDeposititem, deposits, changeDeposits }
 }, { persist: true })

@@ -3,6 +3,7 @@
     <h1>여기 Deposit List</h1>
     <DepositListComponoents/>
   </div>
+  
 </template>
 
 <script setup>
@@ -12,7 +13,6 @@ import axios from 'axios'
 import { ref, onMounted } from 'vue'
 
 const store = useProductStore()
-
 onMounted(() => {
       store.getDepositList()
     });
