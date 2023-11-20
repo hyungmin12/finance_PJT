@@ -19,6 +19,9 @@
           <li class="nav-item">
             <RouterLink to="/login" class="navvar m-5">로그인</RouterLink>
           </li>
+          <li class="nav-item">
+            <RouterLink to="/signup" class="navvar m-5">회원가입</RouterLink>
+          </li>
         </ul>
       </div>
   </div>
