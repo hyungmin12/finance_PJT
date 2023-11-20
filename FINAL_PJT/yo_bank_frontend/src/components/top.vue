@@ -8,6 +8,9 @@
     <div>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ma-2 pa-2">
           <li class="nav-item">
+            <RouterLink to="/depositList">예적금</RouterLink>
+          </li>
+          <li class="nav-item">
             <RouterLink to="/community1">커뮤니티1</RouterLink>
           </li>
           <li class="nav-item">
