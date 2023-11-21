@@ -77,7 +77,7 @@
                 <input type="text" v-model.trim="salary" class="signup-text">
               </th>
             </tr>
-      <input @click.prevent="signUp" value="회원가입" class="submit">
+      <input @click.prevent="signUp" value="회원가입" type="submit">
     </thead>
   </table>
 </div>
