@@ -18,6 +18,7 @@ from rest_framework import status
 from accounts.models import User
 from django.contrib.auth.decorators import login_required
 import json
+from django.shortcuts import get_object_or_404
 
 # permission Decorators
 from rest_framework.decorators import permission_classes
@@ -143,7 +144,7 @@ def signup_deposit(request, option_pk):
     user = request.user
     depositOption = DepositOptions.objects.get(id=option_pk)
     deposit_product_instance = depositOption.deposit_product
-    if SubscribedProduct.objects.filter(fin_prdt_cd=deposit_product_instance.fin_prdt_cd, save_trm=depositOption.save_trm):
+    if SubscribedProduct.objects.filter(user_id=user.id, fin_prdt_cd=deposit_product_instance.fin_prdt_cd, save_trm=depositOption.save_trm):
         return Response({'message': 'already'})
     if user.left_money_for_financial == 1:
         user.left_money_for_financial = user.money_for_financial
@@ -151,20 +152,20 @@ def signup_deposit(request, option_pk):
         user.used_money_for_financial += int(data['amount'])
         user.left_money_for_financial = user.money_for_financial - user.used_money_for_financial
         user.save()
-    save_data = {
-        "type": "S",
-        "fin_prdt_cd": deposit_product_instance.fin_prdt_cd,
-        "kor_co_nm": deposit_product_instance.kor_co_nm,
-        "fin_prdt_nm": deposit_product_instance.fin_prdt_nm,
-        "max_limit": deposit_product_instance.max_limit,
-        "amount": int(data['amount']),
-        "dcls_end_day": deposit_product_instance.dcls_end_day,
-        "intr_rate_type": depositOption.intr_rate_type,
-        "intr_rate_type_nm": depositOption.intr_rate_type_nm,
-        "save_trm": depositOption.save_trm,
-        "intr_rate": depositOption.intr_rate,
-        "intr_rate2": depositOption.intr_rate2,
-    }
+        save_data = {
+            "type": "S",
+            "fin_prdt_cd": deposit_product_instance.fin_prdt_cd,
+            "kor_co_nm": deposit_product_instance.kor_co_nm,
+            "fin_prdt_nm": deposit_product_instance.fin_prdt_nm,
+            "max_limit": deposit_product_instance.max_limit,
+            "amount": int(data['amount']),
+            "dcls_end_day": deposit_product_instance.dcls_end_day,
+            "intr_rate_type": depositOption.intr_rate_type,
+            "intr_rate_type_nm": depositOption.intr_rate_type_nm,
+            "save_trm": depositOption.save_trm,
+            "intr_rate": depositOption.intr_rate,
+            "intr_rate2": depositOption.intr_rate2,
+        }
     serializer = SubscribedProductSerializer(data=save_data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=user)
@@ -172,14 +173,103 @@ def signup_deposit(request, option_pk):
 
 
 @api_view(["GET"])
-def get_user_grade(request):
-    userGrade = {}
-    userSubscribed = SubscribedProduct.objects.all()
-
-    for subscribed in userSubscribed:
-        print(subscribed.user.money_for_financial)
-
-    # userData = userSubscribed.user_set.all()
-    # print(userData)
-    print("========here========")
-    return Response({"message": "okay"})
+def get_deposit_recommend(request):
+    tmp = [[] for _ in range(100000)]
+    subscribed_products = SubscribedProduct.objects.all()
+    # deposit_products = DepositProduct.objects.get(fin_prdt_cd="WR0001B")
+    #spcl_cnd,join_way,join_member,kor_co_nm,etc_note
+    # print(deposit_products.etc_note)
+    for subscribed_product in subscribed_products:
+        user_id = subscribed_product.user_id
+        fin_prdt_nm = subscribed_product.fin_prdt_nm
+        fin_prdt_cd = subscribed_product.fin_prdt_cd
+        deposit_product = DepositProduct.objects.get(fin_prdt_cd=fin_prdt_cd)
+        # print(deposit_product.etc_note)
+        save_trm = subscribed_product.save_trm
+        intr_rate = subscribed_product.intr_rate
+        intr_rate2 = subscribed_product.intr_rate2
+        user = get_object_or_404(User, id=user_id)
+        money_for_financial = user.money_for_financial
+        tmp[user_id].append([
+            user_id,
+            money_for_financial,
+            deposit_product.kor_co_nm,
+            fin_prdt_nm,
+            save_trm,
+            intr_rate,
+            intr_rate2,
+            deposit_product.spcl_cnd,
+            deposit_product.join_way,
+            deposit_product.join_member,
+            deposit_product.etc_note,
+        ])
+    # 은행명 == kor_co_nm, 상품이름 == fin_prdt_nm, 개월수 ==  save_trm => 순위 
+    # print(tmp[:4])
+    # print()
+    a0to50, a51to100, a101to150, a151to200, a201to300, over_than_300 = [], [], [], [], [], []
+    for tm in tmp:
+        for t in tm:
+            if t:
+                if 0 <=int(t[1])<= 500000:
+                    a0to50.append(t)
+                elif 500001<= int(t[1])<= 1000000:
+                    a51to100.append(t)
+                elif 1000001<= int(t[1])<= 1500000:
+                    a101to150.append(t)
+                elif 1500001<= int(t[1])<= 2000000:
+                    a151to200.append(t)
+                elif 2000001<= int(t[1])<= 3000000:
+                    a201to300.append(t)
+                else:
+                    over_than_300.append(t)
+    
+    dic_0to50 = {}
+    # = {'0to50':[],'51to100':[], '101to150':[], '151to200':[],'201to300':[],'over_than_300':[]}
+    # 각 금액별 벨류를 확인하고 가장 높은 벨류 세가지를 찾아서(a0to50의 인덱스를 찾는게 좋을듯)
+    # return시키기
+    for a in a0to50:
+        if f'{a[2]},{a[3]},{a[4]}' not in dic_0to50:
+            dic_0to50[f'{a[2]},{a[3]},{a[4]}'] = 1
+        elif f'{a[2]},{a[3]},{a[4]}' in dic_0to50:
+            dic_0to50[f'{a[2]},{a[3]},{a[4]}'] += 1
+    # print("================이거 인덱스=======")
+    # print("================이거 인덱스=======")
+    # print()
+    # print("================이거 그냥 값=======")
+    # print(dic_0to50)
+    # print("================이거 그냥 값=======")
+    result_list = []
+    rank = 1
+    if len(dic_0to50) > 3:
+        sorted_items = sorted(dic_0to50.items(), key=lambda x: x[1], reverse=True)
+        top_3_keys = [key for key, value in sorted_items[:3]]
+        # print(sorted_items[top_3_keys[0]])
+        # print(sorted_items[top_3_keys[1]])
+        # print(sorted_items[top_3_keys[2]])
+        # ['우리은행,WON플러스예금,12', '우리은행,WON플러스예금,6', '한국스탠다드차타드은행,e-그린세이브예금,6']
+        for top in top_3_keys:
+            # bank_name,product_name,how_long = top.split()
+            tops = top.split(',')
+            # print(tops)
+            deposit_product = DepositProduct.objects.get(kor_co_nm=tops[0], fin_prdt_nm=tops[1])
+            # print(deposit_product)
+            fin_prdt_cd_for_deposit = deposit_product.fin_prdt_cd
+            # print(fin_prdt_cd_for_deposit)
+            final_option = DepositOptions.objects.get(deposit_product_id = fin_prdt_cd_for_deposit, save_trm = tops[2])
+            result_dic = {
+                'kor_co_nm' : tops[0],
+                'fin_prdt_nm' : tops[1],
+                'save_trm' : tops[2],
+                'intr_rate' : final_option.intr_rate,
+                'intr_rate2' : final_option.intr_rate2,
+                'intr_rate_type_nm' : final_option.intr_rate_type_nm,
+                'join_member' : deposit_product.join_member,
+                'join_way' : deposit_product.join_way,
+                'spcl_cnd' : deposit_product.spcl_cnd,
+                'etc_note' : deposit_product.etc_note,
+                'rank' : rank
+            }
+            rank += 1
+            result_list.append(result_dic)
+    print(result_list)
+    return Response(result_list)

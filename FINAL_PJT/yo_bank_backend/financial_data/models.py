@@ -82,7 +82,6 @@ class SavingProduct(models.Model):
 
 class SavingOptions(models.Model):
     saving_product = models.ForeignKey(SavingProduct, on_delete=models.CASCADE, related_name='options', to_field='fin_prdt_cd')
-
     # 저축금리유형
     intr_rate_type = models.TextField(null=True)
     # 저축금리유형명
