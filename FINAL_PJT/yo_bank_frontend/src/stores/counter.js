@@ -69,7 +69,6 @@ export const useCounterStore = defineStore('counter', () => {
     axios({
       method: 'post',
       url: `${USER_API}/accounts/signup/`,
-      data,
       data: {
               username: username,
               password1: password1,

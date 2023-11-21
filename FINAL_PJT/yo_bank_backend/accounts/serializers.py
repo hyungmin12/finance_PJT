@@ -5,18 +5,15 @@ from allauth.account.adapter import get_adapter
 from .models import User
 from dj_rest_auth.registration.serializers import RegisterSerializer
 
+
 class CustomRegisterSerializer(RegisterSerializer):
 # 추가할 필드들을 정의합니다.
-    nickname = serializers.CharField(
-    required=False,
-    allow_blank=True,
-    max_length=255
-    )
-    age = serializers.CharField(required=False)
-    money_for_financial = serializers.CharField(required=False)
-    money_for_travel = serializers.CharField(required=False)
-    salary = serializers.CharField(required=False)
-    # financial_products = serializers.ListField(child=serializers.CharField(), required=False)
+    nickname = serializers.CharField(required=False)
+    age = serializers.IntegerField(required=False)
+    money_for_financial = serializers.IntegerField(required=False)
+    money_for_travel = serializers.IntegerField(required=False)
+    salary = serializers.IntegerField(required=False)
+    financial_products = serializers.ListField(child=serializers.CharField(), required=False)
     
     def get_cleaned_data(self):
         return {
@@ -25,9 +22,9 @@ class CustomRegisterSerializer(RegisterSerializer):
         'nickname': self.validated_data.get('nickname', ''),
         'age': self.validated_data.get('age', ''),
         'money_for_financial': self.validated_data.get('money_for_financial', ''),
-        'money_for_travel': self.validated_data.get('salmoney_for_travelary', ''),
+        'money_for_travel': self.validated_data.get('money_for_travel', ''),
         'salary': self.validated_data.get('salary', ''),
-        # 'financial_products': self.validated_data.get('financial_products', ''),
+        'financial_products': self.validated_data.get('financial_products', ''),
         }
 
     def save(self, request):

@@ -45,6 +45,7 @@ const signUp = function () {
     money_for_travel: money_for_travel.value,
     salary : salary.value,
   }
+  // console.log(username,money_for_financial,salary)
   store.signUp(payload)
 }
 

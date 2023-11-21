@@ -141,16 +141,18 @@ def save_deposit_data(request):
 @api_view(["POST"])
 @login_required
 def signup_deposit(request, option_pk):
-    # if request.method == 'GET':
     data = json.loads(request.body.decode('utf-8'))
     user = request.user
-    if user.money_for_financial is not None:
-        user.money_for_financial = user.money_for_financial - int(data['amount'])
-    # user.money_for_financial = user.money_for_financial - int(data['amount'])
     depositOption = DepositOptions.objects.get(id=option_pk)
     deposit_product_instance = depositOption.deposit_product
     if SubscribedProduct.objects.filter(fin_prdt_cd=deposit_product_instance.fin_prdt_cd, save_trm=depositOption.save_trm):
         return JsonResponse({'message': 'already'})
+    if user.left_money_for_financial == -1:
+        user.left_money_for_financial = user.money_for_financial
+    if user.money_for_financial != 0 and user.left_money_for_financial - int(data['amount']) >= 0:
+        user.used_money_for_financial += int(data['amount'])
+        user.left_money_for_financial = user.money_for_financial - user.used_money_for_financial
+        user.save()
     save_data = {
         "type": "S",
         "fin_prdt_cd": deposit_product_instance.fin_prdt_cd,
