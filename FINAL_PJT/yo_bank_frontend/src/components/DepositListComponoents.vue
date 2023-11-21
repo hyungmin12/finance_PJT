@@ -51,7 +51,11 @@
                     <td>저축금리 : {{ option.intr_rate }}</td>
                     <td>우대금리 : {{ option.intr_rate2 }}</td>
                   </table>
-                  <button @click="signUpThisProduct(option.id)">가입하기</button>
+                  <form @submit.prevent="signUpThisProduct(option.id)">
+                    <input v-model="amount" type="text">
+                    <button>가입하기</button>
+                    <input type="submit">
+                  </form>
                 </div>
               </div>
         </tr>
@@ -94,6 +98,7 @@ const store = useProductStore();
 const store2 = useCounterStore();
 const showDetails = ref({});
 const token = store2.token;
+const amount = ref(null)
 
 const toggleDetails = (depositId) => {
   showDetails.value[depositId] = !showDetails.value[depositId];
@@ -106,13 +111,16 @@ const signUpThisProduct = function (optionPk) {
     headers: {
       Authorization: `Token ${token}`,
     },
+    data : {
+      amount : amount.value
+    }
   })
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  .then((res) => {
+    console.log(res.data);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 };
 </script>
 

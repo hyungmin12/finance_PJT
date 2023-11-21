@@ -12,11 +12,11 @@ class CustomRegisterSerializer(RegisterSerializer):
     allow_blank=True,
     max_length=255
     )
-    age = serializers.IntegerField(required=False)
-    money_for_financial = serializers.IntegerField(required=False)
-    money_for_travel = serializers.IntegerField(required=False)
-    salary = serializers.IntegerField(required=False)
-    # financial_products = serializers.ListField(child=serializers.IntegerField(), required=False)
+    age = serializers.CharField(required=False)
+    money_for_financial = serializers.CharField(required=False)
+    money_for_travel = serializers.CharField(required=False)
+    salary = serializers.CharField(required=False)
+    # financial_products = serializers.ListField(child=serializers.CharField(), required=False)
     
     def get_cleaned_data(self):
         return {

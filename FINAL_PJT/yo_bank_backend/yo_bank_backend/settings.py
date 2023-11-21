@@ -36,15 +36,17 @@ INSTALLED_APPS = [
     'accounts',
     'articles',
 
-
     'rest_framework',
     'rest_framework.authtoken',
-    'dj_rest_auth',
+    
     'corsheaders',
     'django.contrib.sites',
+
+    'dj_rest_auth',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
+    
+    # 'allauth.socialaccount',
     'dj_rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -77,6 +79,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+    
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -162,3 +166,13 @@ AUTH_USER_MODEL = 'accounts.User'
 REST_AUTH = {
 'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
 }
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = None
+AUTHENTICATION_BACKENDS = (
+# django 기본 인증 백엔드
+"django.contrib.auth.backends.ModelBackend",
+# django-allauth 패키지에서 제공하는 인증 백엔드 클래스.
+"allauth.account.auth_backends.AuthenticationBackend",
+)
+
+ACCOUNT_ADAPTER = 'accounts.models.CustomAccountAdapter'

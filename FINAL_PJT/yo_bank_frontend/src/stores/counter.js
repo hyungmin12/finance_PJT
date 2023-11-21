@@ -41,17 +41,48 @@ export const useCounterStore = defineStore('counter', () => {
   }
 
   const signUp = function (payload) {
-    const { username, password1, password2 } = payload
-
+    const {   username,
+              password1,
+              password2,
+              nickname,
+              email,
+              age,
+              money_for_financial,
+              money_for_travel,
+              salary, } = payload
+    // console.log(typeof money_for_financial)
+    // money_for_financial = Number(money_for_financial)
+    // money_for_travel = Number(money_for_travel)
+    // age = Number(age)
+    // salary = Number(salary)
+    // const data = new FormData();
+    // data.append('username',username)
+    // data.append('password1',password1)
+    // data.append('password2',password2)
+    // data.append('nickname',nickname)
+    // data.append('email',email)
+    // data.append('age',age)
+    // data.append('money_for_financial',money_for_financial)
+    // data.append('money_for_travel',money_for_travel)
+    // data.append('salary',salary)
+    
     axios({
       method: 'post',
       url: `${USER_API}/accounts/signup/`,
+      data,
       data: {
-        username, password1, password2
-      }
-    })
+              username: username,
+              password1: password1,
+              password2: password2,
+              nickname: nickname,
+              email: email,
+              age: age,
+              money_for_financial: money_for_financial,
+              money_for_travel: money_for_travel,
+              salary : salary,
+            }
+      })
       .then((res) => {
-        console.log(res)
         const password = password1
         logIn({ username, password })
       })

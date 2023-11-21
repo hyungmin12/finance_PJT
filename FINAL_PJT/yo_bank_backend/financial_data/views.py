@@ -17,6 +17,8 @@ from django.http import JsonResponse
 from rest_framework import status
 from accounts.models import User
 from django.contrib.auth.decorators import login_required
+import json
+
 
 # from django.shortcuts import get_list_or_404
 
@@ -140,7 +142,11 @@ def save_deposit_data(request):
 @login_required
 def signup_deposit(request, option_pk):
     # if request.method == 'GET':
+    data = json.loads(request.body.decode('utf-8'))
     user = request.user
+    if user.money_for_financial is not None:
+        user.money_for_financial = user.money_for_financial - int(data['amount'])
+    # user.money_for_financial = user.money_for_financial - int(data['amount'])
     depositOption = DepositOptions.objects.get(id=option_pk)
     deposit_product_instance = depositOption.deposit_product
     if SubscribedProduct.objects.filter(fin_prdt_cd=deposit_product_instance.fin_prdt_cd, save_trm=depositOption.save_trm):
@@ -151,7 +157,7 @@ def signup_deposit(request, option_pk):
         "kor_co_nm": deposit_product_instance.kor_co_nm,
         "fin_prdt_nm": deposit_product_instance.fin_prdt_nm,
         "max_limit": deposit_product_instance.max_limit,
-        "amount": 50000,
+        "amount": int(data['amount']),
         "dcls_end_day": deposit_product_instance.dcls_end_day,
         "intr_rate_type": depositOption.intr_rate_type,
         "intr_rate_type_nm": depositOption.intr_rate_type_nm,
