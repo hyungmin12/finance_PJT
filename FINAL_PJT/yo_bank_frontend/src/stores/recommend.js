@@ -17,10 +17,10 @@ export const useRecommendStore = defineStore('recommend', () => {
   }
   // const token = userStore.token.value
 
-  const getUserGrade = function(){
+  const getDepositRecommended = function(){
     axios({
       method : 'get',
-      url : 'http://127.0.0.1:8000/financial_data/get_user_grade',
+      url : 'http://127.0.0.1:8000/financial_data/get_deposit_recommend',
       headers: {
         Authorization: `Token ${tokens.value}`
       }
@@ -36,5 +36,5 @@ export const useRecommendStore = defineStore('recommend', () => {
   }
   
 
-  return { getUserGrade, }
+  return { getDepositRecommended, }
 }, { persist: true })

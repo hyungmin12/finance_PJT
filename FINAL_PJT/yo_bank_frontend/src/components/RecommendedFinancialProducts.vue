@@ -11,7 +11,7 @@ const store = useRecommendStore()
 
 onMounted(async () => {
   // console.log("===============")
-  await store.getUserGrade()
+  await store.getDepositRecommended()
   // console.log(store.userInformations,"===여기 컴포넌트===")
   // console.log(store.userInformations.username)
   // console.log("===============")
