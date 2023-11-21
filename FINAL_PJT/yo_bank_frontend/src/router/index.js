@@ -19,7 +19,8 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/',
+      // 다시 건들기
+      path: '/aa',
       name: 'ArticleView',
       component: ArticleView
     },
