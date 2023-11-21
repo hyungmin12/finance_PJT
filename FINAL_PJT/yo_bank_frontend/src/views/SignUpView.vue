@@ -77,10 +77,10 @@
                 <input type="text" v-model.trim="salary" class="signup-text">
               </th>
             </tr>
-      <input type="submit" value="회원가입" class="submit">
-        </thead>
-      </table>
-    </div>
+      <input @click.prevent="signUp" value="회원가입" class="submit">
+    </thead>
+  </table>
+</div>
 
 </template>
 
@@ -220,4 +220,4 @@ body {
     .submit:hover {
       background-color: #7f807e;
     }
-</style>
+</style> 

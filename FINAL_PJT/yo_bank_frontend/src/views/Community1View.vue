@@ -13,9 +13,11 @@
           </div>
         </div>
       </div>
-        <RouterLink :to="{ name: 'CreateView' }">
-          [CREATE]
+      <div class="text-create" style="text-align: right; margin-top: 20px; margin-right: 178px;">
+        <RouterLink :to="{ name: 'CreateView' }" class="text-create">
+          글쓰기
         </RouterLink>
+      </div>
     </div>
     <div class="container d-flex flex-row justify-content-center">
         <FinanceComponent class="m-5"/>
@@ -65,5 +67,9 @@ import { RouterLink } from 'vue-router'
   top: 0;
   z-index: -1;
   height: auto;
+}
+.text-create{
+  text-decoration-line: none;
+
 }
 </style>

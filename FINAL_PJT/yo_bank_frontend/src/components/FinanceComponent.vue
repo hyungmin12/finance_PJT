@@ -1,23 +1,21 @@
 <template>
   <div>
-    <table class="table w-35">
+    <table class="table w-35" style="width: 1200px;">
       <thead>
         <tr>
-          <th scope="col">제목</th>
-          <th scope="col">내용</th>
-          <th scope="col">좋아요</th>
-          <th scope="col">조회</th>
-          <th scope="col">댓글</th>
-          <th scope="col">작성일</th>
+          <th scope="col" class="notice-board"></th>
+          <th scope="col" class="notice-board"></th>
+          <th scope="col" class="notice-board">조회</th>
+          <th scope="col" class="notice-board">댓글</th>
+          <th scope="col" class="notice-board">작성일</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody> 
         <tr class="hoverable-row">
           <th scope="row">1</th>
           <td>Mark</td>
           <td>Otto</td>
-          <td>ddd</td>
-          <td>ddd</td>
+          <td>ddssssssssssasdasdasdsssd</td>
           <td>ddd</td>
         </tr>
       </tbody>
@@ -26,6 +24,16 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import { useCounterStore } from '@/stores/counter'
+import { RouterLink } from 'vue-router'
+import ArticleList from '@/components/ArticleList.vue'
+
+const store = useCounterStore()
+
+onMounted(() => {
+  store.getArticles()
+})
 </script>
 
 <style scoped>
@@ -36,10 +44,22 @@
   table {
     border-collapse: collapse;
     width: 100%;
+    border-top: 1px solid black; /* 테이블 전체의 테두리 제거 */
+    border-bottom: 1px solid black; /* 테이블 전체의 테두리 제거 */
   }
 
   th, td {
     padding: 8px;
     text-align: left;
+    border-top: 1px solid rgb(207, 205, 205); /* 테이블 전체의 테두리 제거 */
+    border-bottom: 1px solid rgb(207, 205, 205); /* 각 셀의 테두리 제거 */
+    border-left: none;
+    border-right: none;
+  }
+  .notice-board{
+    background-color: rgb(242, 239, 239);
+  }
+  .notice-bd{
+    width: 300px;
   }
 </style>

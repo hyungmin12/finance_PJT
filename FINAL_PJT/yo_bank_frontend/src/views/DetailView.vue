@@ -1,6 +1,20 @@
 <template>
-  <div>
-    <h1>Detail</h1>
+  <div class="container">
+    <div class="carousel-container">
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner all_box ">
+          <div class="carousel-item active">
+            <img src="@/assets/images/bg.jpg">
+            <div class="ani_box">
+              <img src="@/assets/images/create.png" alt="" class="ani_img">
+              <p class="slogan">
+                <strong>게시글 수정/삭제</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div v-if="article">
       <p>제목 : {{ article.title }}</p>
       <p>내용 : {{ article.content }}</p>
