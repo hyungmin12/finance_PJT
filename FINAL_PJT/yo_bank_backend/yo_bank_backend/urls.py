@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/v1/', include('articles.urls')),
     path('financial_product_recommendations/', include('financial_product_recommendations.urls')),
     path('financial_data/', include('financial_data.urls')),
+    path('check/', include('accounts.urls')),
     path('accounts/', include('dj_rest_auth.urls')),
     path('accounts/signup/', include('dj_rest_auth.registration.urls')),
 ]

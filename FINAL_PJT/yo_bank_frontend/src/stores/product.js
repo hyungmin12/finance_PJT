@@ -7,6 +7,7 @@ export const useProductStore = defineStore('product', () => {
   const router = useRouter()
   const deposits = ref([])
   const USER_API = 'http://127.0.0.1:8000'
+  // const change = ref(null)
 
   const getDeposititem = function(){
     axios({
@@ -15,6 +16,7 @@ export const useProductStore = defineStore('product', () => {
     })
     .then((res)=>{
       // console.log("o")
+      getDepositList()
       console.log("get_deposit_item")
     })
     .catch((err)=>{
@@ -22,6 +24,9 @@ export const useProductStore = defineStore('product', () => {
     })
   }
 
+  // change = computed(()=>{
+  //   getDepositList()
+  // })
 
   const getDepositList = function(){
     axios({

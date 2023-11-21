@@ -12,7 +12,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=254, blank=True, null=True)
     age = models.IntegerField(default=0)
     used_money_for_financial = models.IntegerField(default=0)
-    left_money_for_financial = models.IntegerField(default=-1)
+    left_money_for_financial = models.IntegerField(default=1)
     money_for_financial = models.IntegerField(default=0)
     money_for_travel = models.IntegerField(default=0)
     salary = models.IntegerField(default=0)
@@ -36,8 +36,8 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         money_for_financial = data.get("money_for_financial")
         money_for_travel = data.get("money_for_travel")
         financial_product = data.get("financial_products")
-        used_money_for_financial = data.get("used_money_for_financial")
-        left_money_for_financial = data.get("left_money_for_financial")
+        used_money_for_financial = data.get("used_money_for_financial") or 0
+        left_money_for_financial = data.get("left_money_for_financial") or 1
         salary = data.get("salary")
         user_email(user, email)
         user_username(user, username)

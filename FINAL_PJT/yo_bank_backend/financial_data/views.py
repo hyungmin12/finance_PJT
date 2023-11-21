@@ -19,10 +19,9 @@ from accounts.models import User
 from django.contrib.auth.decorators import login_required
 import json
 
-
-# from django.shortcuts import get_list_or_404
-
-# bfb3b88bf28e201b6a11b0ddadcdc8c9
+# permission Decorators
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
 
 
 @api_view(["GET"])
@@ -38,10 +37,9 @@ def index(request):
     api_key = "bfb3b88bf28e201b6a11b0ddadcdc8c9"
     url = f"http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json?auth={api_key}&topFinGrpNo=020000&pageNo=1"
     response = requests.get(url).json()
-
     return Response(response)
 
-
+@api_view(["GET"])
 def save_deposit_data(request):
     api_key = "bfb3b88bf28e201b6a11b0ddadcdc8c9"
     url = f"http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json?auth={api_key}&topFinGrpNo=020000&pageNo=1"
@@ -85,7 +83,7 @@ def save_deposit_data(request):
         if optionserializer.is_valid(raise_exception=True):
             optionserializer.save()
 
-    return JsonResponse({"message": "okay"})
+    return Response({"message": "okay"})
 
 
 # def save_saving_data(request):
@@ -146,8 +144,8 @@ def signup_deposit(request, option_pk):
     depositOption = DepositOptions.objects.get(id=option_pk)
     deposit_product_instance = depositOption.deposit_product
     if SubscribedProduct.objects.filter(fin_prdt_cd=deposit_product_instance.fin_prdt_cd, save_trm=depositOption.save_trm):
-        return JsonResponse({'message': 'already'})
-    if user.left_money_for_financial == -1:
+        return Response({'message': 'already'})
+    if user.left_money_for_financial == 1:
         user.left_money_for_financial = user.money_for_financial
     if user.money_for_financial != 0 and user.left_money_for_financial - int(data['amount']) >= 0:
         user.used_money_for_financial += int(data['amount'])
@@ -170,5 +168,18 @@ def signup_deposit(request, option_pk):
     serializer = SubscribedProductSerializer(data=save_data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=user)
-        return JsonResponse({"message": "okay"})
-    
+        return Response({"message": "okay"})
+
+
+@api_view(["GET"])
+def get_user_grade(request):
+    userGrade = {}
+    userSubscribed = SubscribedProduct.objects.all()
+
+    for subscribed in userSubscribed:
+        print(subscribed.user.money_for_financial)
+
+    # userData = userSubscribed.user_set.all()
+    # print(userData)
+    print("========here========")
+    return Response({"message": "okay"})

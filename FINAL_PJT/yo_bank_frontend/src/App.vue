@@ -4,6 +4,7 @@
         <input type="submit" value="logOut">
     </form>
     <top/>
+    <!-- <RecommendedFinancialProducts/> -->
   </header>
 </template>
 
@@ -16,6 +17,8 @@ import DepositListView from '@/views/DepositListView.vue';
 import ExchangeComponents from '@/components/ExchangeComponents.vue'
 import KakaoMapComponents from '@/components/KakaoMapComponents.vue'
 import { useProductStore } from '@/stores/product.js'
+
+import RecommendedFinancialProducts from '@/components/RecommendedFinancialProducts.vue'
 
 
 const store = useCounterStore()

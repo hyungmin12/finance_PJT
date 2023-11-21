@@ -8,11 +8,6 @@ urlpatterns = [
     path("save-deposit-data/", views.save_deposit_data),
     path("signup_deposit/<int:option_pk>", views.signup_deposit),
     path("deposit_product_list/", views.deposit_product_list),
-    # path("deposit_product_detail/<int:deposit_pk>", views.deposit_product_detail),
-    # # 3. 저장된 데이터 전체 조회
-    # path("save-exchange-data/", views.save_exchange_data)
-    # path("list-data/", views.list_data),
-    # # 4. 특정 조건 데이터 확인: 섭씨 30도가 넘는 시간대 조회
-    # path("hot-weathers/", views.hot_weathers)
+    path("get_user_grade/", views.get_user_grade),
 ]
 

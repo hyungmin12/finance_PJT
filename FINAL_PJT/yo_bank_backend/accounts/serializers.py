@@ -4,7 +4,7 @@ from allauth.utils import get_username_max_length
 from allauth.account.adapter import get_adapter
 from .models import User
 from dj_rest_auth.registration.serializers import RegisterSerializer
-
+from dj_rest_auth.serializers import UserDetailsSerializer
 
 class CustomRegisterSerializer(RegisterSerializer):
 # 추가할 필드들을 정의합니다.
@@ -34,3 +34,9 @@ class CustomRegisterSerializer(RegisterSerializer):
         adapter.save_user(request, user, self)
         self.custom_signup(request, user)
         return user
+
+
+class CustomUserDetailsSerializer(UserDetailsSerializer):
+    class Meta(UserDetailsSerializer.Meta):
+        model = User
+        fields = ('email','username','nickname','money_for_financial','money_for_travel','age','used_money_for_financial','left_money_for_financial','salary')

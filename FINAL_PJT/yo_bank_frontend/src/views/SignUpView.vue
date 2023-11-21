@@ -41,6 +41,8 @@ const signUp = function () {
     nickname: nickname.value,
     email: email.value,
     age: age.value,
+    // used_money_for_financial : 0,
+    // left_money_for_financial : 0,
     money_for_financial: money_for_financial.value,
     money_for_travel: money_for_travel.value,
     salary : salary.value,

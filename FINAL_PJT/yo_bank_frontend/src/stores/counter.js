@@ -11,7 +11,7 @@ export const useCounterStore = defineStore('counter', () => {
   const token = ref(null)
   const EXCHANGE_API = 'cScsNMc43zgGq56PFZDLCLqWdRhiZizf'
   const EXCHANGE_URL = '/exchange-api?authkey=' + EXCHANGE_API + '&data=AP01'
-
+  const userInformations = ref([])
 
 
   const isLogin = computed(() => {
@@ -21,6 +21,25 @@ export const useCounterStore = defineStore('counter', () => {
       return true
     }
   })
+
+  const getUserInformations = function () {
+    axios({
+      method: 'get',
+      url: `${USER_API}/check/user/`,
+      headers: {
+        Authorization: `Token ${token.value}`
+      }
+    })
+    .then((res) =>{
+      userInformations.value = res.data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+
+
 
   // DRF에 article 조회 요청을 보내는 action
   const getArticles = function () {
@@ -47,25 +66,11 @@ export const useCounterStore = defineStore('counter', () => {
               nickname,
               email,
               age,
+              used_money_for_financial,
+              left_money_for_financial,
               money_for_financial,
               money_for_travel,
               salary, } = payload
-    // console.log(typeof money_for_financial)
-    // money_for_financial = Number(money_for_financial)
-    // money_for_travel = Number(money_for_travel)
-    // age = Number(age)
-    // salary = Number(salary)
-    // const data = new FormData();
-    // data.append('username',username)
-    // data.append('password1',password1)
-    // data.append('password2',password2)
-    // data.append('nickname',nickname)
-    // data.append('email',email)
-    // data.append('age',age)
-    // data.append('money_for_financial',money_for_financial)
-    // data.append('money_for_travel',money_for_travel)
-    // data.append('salary',salary)
-    
     axios({
       method: 'post',
       url: `${USER_API}/accounts/signup/`,
@@ -76,6 +81,8 @@ export const useCounterStore = defineStore('counter', () => {
               nickname: nickname,
               email: email,
               age: age,
+              // used_money_for_financial : 0,
+              // left_money_for_financial : 0,
               money_for_financial: money_for_financial,
               money_for_travel: money_for_travel,
               salary : salary,
@@ -101,7 +108,6 @@ export const useCounterStore = defineStore('counter', () => {
       }
     })
       .then((res) => {
-        console.log(res.data)
         token.value = res.data.key
         router.push({ name: 'ArticleView' })
       })
@@ -139,5 +145,5 @@ export const useCounterStore = defineStore('counter', () => {
     })
   }
 
-  return { articles, USER_API, getArticles, signUp, logIn, token, isLogin, logOut, exchange, exchange_data  }
+  return { articles, USER_API, getArticles, signUp, logIn, token, isLogin, logOut, exchange, exchange_data, getUserInformations, userInformations}
 }, { persist: true })
