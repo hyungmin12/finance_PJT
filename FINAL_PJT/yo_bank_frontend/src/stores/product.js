@@ -23,11 +23,7 @@ export const useProductStore = defineStore('product', () => {
       console.log(err)
     })
   }
-
-  // change = computed(()=>{
-  //   getDepositList()
-  // })
-
+  
   const getDepositList = function(){
     axios({
       method:"get",

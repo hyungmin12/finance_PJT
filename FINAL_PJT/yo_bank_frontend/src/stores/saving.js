@@ -38,6 +38,7 @@ export const useSavingStore = defineStore('saving', () => {
       url:"http://127.0.0.1:8000/financial_data/saving_product_list/"
     })
     .then((res)=>{
+      console.log("====================saving")
       Savings.value = res.data
     })
     .catch((err)=>{

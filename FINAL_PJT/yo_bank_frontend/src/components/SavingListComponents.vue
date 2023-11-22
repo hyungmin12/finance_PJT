@@ -1,5 +1,5 @@
 <template>
-  <!-- <div>
+  <div>
     <table>
       <thead>
         <tr>
@@ -11,8 +11,8 @@
       <tbody>
         <tr v-for="deposit of store.changeSavings" :key="deposit.id">
           <td>{{ deposit.kor_co_nm }}</td>
-          <td>{{ deposit.fin_prdt_nm }}</td> -->
-            <!-- <button @click="toggleDetails(deposit.id)">Toggle Details</button>
+          <td>{{ deposit.fin_prdt_nm }}</td>
+            <button @click="toggleDetails(deposit.id)">Toggle Details</button>
               <div v-if="showDetails[deposit.id]">
                 <div v-for="option of deposit.options" :key="option.save_trm">
                   <hr />
@@ -28,7 +28,7 @@
                     <td>저축금리 : {{ option.intr_rate }}</td>
                     <td>우대금리 : {{ option.intr_rate2 }}</td>
                   </table>
-                  <form @submit.prevent="signUpThisProduct(option.id)">
+                  <form @submit.prevent="signUpThisSaving(option.id)">
                     <input v-model="amount" type="text">
                     <input type="submit" value="가입하기">
                   </form>
@@ -37,7 +37,7 @@
         </tr>
       </tbody>
     </table>
-  </div> -->
+  </div>
 </template>
 
 
@@ -53,28 +53,28 @@ const showDetails = ref({});
 const token = store2.token;
 const amount = ref(null)
 
-// const toggleDetails = (depositId) => {
-//   showDetails.value[depositId] = !showDetails.value[depositId];
-// };
+const toggleDetails = (depositId) => {
+  showDetails.value[depositId] = !showDetails.value[depositId];
+};
 
-// const signUpThisProduct = function (optionPk) {
-//   axios({
-//     method: "POST",
-//     url: `http://127.0.0.1:8000/financial_data/signup_deposit/${optionPk}`,
-//     headers: {
-//       Authorization: `Token ${token}`,
-//     },
-//     data : {
-//       amount : amount.value
-//     }
-//   })
-//   .then((res) => {
-//     console.log(res.data);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-// };
+const signUpThisSaving = function (optionPk) {
+  axios({
+    method: "POST",
+    url: `http://127.0.0.1:8000/financial_data/signup_saving/${optionPk}`,
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+    data : {
+      amount : amount.value
+    }
+  })
+  .then((res) => {
+    console.log(res.data);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+};
 </script>
 
 <style lang="scss" scoped>

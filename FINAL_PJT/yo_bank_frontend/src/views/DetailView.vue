@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="carousel-container">
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner all_box ">
@@ -15,14 +15,17 @@
         </div>
       </div>
     </div>
-    <div v-if="article">
-      <p>제목 : {{ article.title }}</p>
-      <p>내용 : {{ article.content }}</p>
-      <p>작성일 : {{ article.created_at }}</p>
-      <p>수정일 : {{ article.updated_at }}</p>
-      <button @click="updateArticle">수정하기</button>
-      <button @click="deleteArticle">삭제하기</button>
-      <button @click="goCommunity">돌아가기</button>
+    <div>
+      <div v-if="article" class="detail-content" style="background-color: white; width: 60%;">
+        <p class="text-title"><strong>제목 : {{ article.title }}</strong></p>
+        <hr class="hr-line">
+        <p class="text">내용 : {{ article.content }}</p>
+        <p class="text">작성일 : {{ article.created_at }}</p>
+        <p class="text">수정일 : {{ article.updated_at }}</p>
+        <button @click="updateArticle" class="btn btn-secondary text">수정하기</button>
+        <button @click="deleteArticle" class="btn btn-secondary text">삭제하기</button>
+        <button @click="goCommunity" class="btn btn-secondary text">돌아가기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -74,9 +77,27 @@ const deleteArticle = function() {
       router.push({name:'Community1View'})
     })
 }
-
 </script>
 
 <style>
-
+.detail-content{
+  position: absolute;
+  left: 25%;
+  top: 50%;
+  border: solid 1px black;
+  border-radius: 8px;
+}
+.text{
+  margin: 10px;
+}
+.text-title{
+  font-size: 25px;
+  margin: 10px;
+}
+.hr-line{
+  background-color: black;
+  height: 1px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
 </style>
