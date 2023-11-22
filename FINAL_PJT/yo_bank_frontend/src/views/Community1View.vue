@@ -20,11 +20,7 @@
       </div>
     </div>
     <div>
-      <FinanceComponent 
-        v-for="article in store.articles"
-        :key="article.id"
-        :article="article"
-      />
+      <FinanceComponent />
     </div>
   </div>
 </template>

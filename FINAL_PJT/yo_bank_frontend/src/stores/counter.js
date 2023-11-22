@@ -109,6 +109,7 @@ export const useCounterStore = defineStore('counter', () => {
     })
       .then((res) => {
         token.value = res.data.key
+        getUserInformations()
         router.push({ name: 'HomeView' })
       })
       .catch((err) => {

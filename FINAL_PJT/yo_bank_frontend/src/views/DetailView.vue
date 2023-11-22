@@ -22,9 +22,21 @@
         <p class="text">내용 : {{ article.content }}</p>
         <p class="text">작성일 : {{ article.created_at }}</p>
         <p class="text">수정일 : {{ article.updated_at }}</p>
-        <button @click="updateArticle" class="btn btn-secondary text">수정하기</button>
-        <button @click="deleteArticle" class="btn btn-secondary text">삭제하기</button>
+
+        <button v-if="article.user === userId" @click="updateArticle" class="btn btn-secondary text">수정하기</button>
+        <button v-if="article.user === userId" @click="deleteArticle" class="btn btn-secondary text">삭제하기</button>
         <button @click="goCommunity" class="btn btn-secondary text">돌아가기</button>
+
+        <div v-for="comment of comments" class="d-flex">
+            <p>댓글: {{ comment.content }}</p>
+            <button v-if="comment.user === userId"  @click="deleteComment(comment.id, article.pk)">댓글 삭제</button>
+        </div>
+
+        <form @submit.prevent="createComment">
+          <input type="text" v-model="commentContent">
+          <input type="submit" value="댓글 작성">
+        </form>
+
       </div>
     </div>
   </div>
@@ -40,6 +52,37 @@ const store = useCounterStore()
 const route = useRoute()
 const router = useRouter()
 const article = ref(null)
+const comments = ref(null)
+const commentContent = ref(null)
+
+const userId = store.userInformations.id
+
+console.log(userId, " =====")
+
+// 
+const createComment = function(){
+  axios({
+    method: 'POST',
+    url: `${store.USER_API}/api/v1/comment_create/${route.params.id}/`,
+    data : {
+      content : commentContent.value
+    },
+    headers: {
+      Authorization: `Token ${store.token}`
+    }
+  })
+  .then((res) => {
+    // 댓글이 성공적으로 생성되면 comments 배열에 새로운 댓글을 추가
+    comments.value.push(res.data);
+    // 댓글 입력 필드 초기화
+    commentContent.value = null;
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+};
+
+// 
 
 onMounted(() => {
   axios({
@@ -49,6 +92,19 @@ onMounted(() => {
     .then((res) => {
       // console.log(res.data)
       article.value = res.data
+
+        axios({
+          method: 'get',
+          url: `${store.USER_API}/api/v1/comments/${route.params.id}/list`
+        })
+        .then((res) => {
+          // console.log(res.data)
+          comments.value = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
     })
     .catch((err) => {
       console.log(err)
@@ -77,6 +133,22 @@ const deleteArticle = function() {
       router.push({name:'Community1View'})
     })
 }
+
+const deleteComment = function(comment_pk, article_pk) {
+  axios({
+    method: 'DELETE',
+    url: `${store.USER_API}/api/v1/comments/${comment_pk}/`,
+  })
+    .then((res) => {
+      // 댓글 삭제 후 comments 배열에서 해당 댓글을 제거
+      comments.value = comments.value.filter(comment => comment.id !== comment_pk);
+      router.push({name:'DetailView', params : { id: article_pk }});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 </script>
 
 <style>

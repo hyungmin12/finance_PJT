@@ -11,15 +11,16 @@
         </tr>
       </thead>
       <tbody> 
-        <tr v-if="article" class="hoverable-row">
-          <RouterLink :to="{ name: 'DetailView', params: { id: article.id }}">
+        <!-- v-for="article in store.articles"
+        :key="article.id"
+        :article="article" -->
+        <tr v-for="article in store.articles"  class="hoverable-row"  @click="router.push({name:'DetailView',params:{id:article.id}})">
             <th scope="row">{{ article.id }}</th>
             <td>{{ article.title }}</td>
             <td>{{ article.content }}</td>
             <td>{{ article.content }}</td>
             <td>{{ article.content }}</td>
             <!-- [Detail] -->
-          </RouterLink>
         </tr>
         <div>
     <hr>
@@ -33,11 +34,12 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useCounterStore } from '@/stores/counter'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import ArticleList from '@/components/ArticleList.vue'
 import ArticleListItem from '@/components/ArticleListItem.vue'
 
 const store = useCounterStore()
+const router = useRouter()
 
 onMounted(() => {
   store.getArticles()

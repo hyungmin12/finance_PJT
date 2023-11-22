@@ -49,14 +49,14 @@ def article_detail(request, article_pk):
 
 
 @api_view(['GET'])
-def comment_list(request):
-    comments = get_list_or_404(Comment)
-    # 전체 댓글 목록 조회
+def comment_list(request, article_pk):
+    article = get_object_or_404(Article, id=article_pk)
+    # 해당 게시물의 댓글 목록 가져오기
+    comments = article.comment_set.all()
+    # 댓글 목록을 직렬화
     serializer = CommentSerializer(comments, many=True)
-    # 직렬화 해서
     # 반환
     return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 @api_view(['GET','DELETE','PUT'])
 def comment_detail(request, comment_pk):
@@ -67,6 +67,7 @@ def comment_detail(request, comment_pk):
     
     elif request.method == 'DELETE':
         comment.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
         serializer = CommentSerializer(comment, data=request.data)
@@ -79,6 +80,7 @@ def comment_detail(request, comment_pk):
 def comment_create(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     serializer = CommentSerializer(data=request.data)
+    print("===================")
     if serializer.is_valid(raise_exception=True):
         serializer.save(article=article,user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
