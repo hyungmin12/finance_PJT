@@ -11,8 +11,11 @@ from .serializers import (
     DepositProductSerializer,
     SubscribedProductSerializer,
     DepositProductWithOptionsSerializer,
+    SavingProductSerializer,
+    SavingOptionsSerializer,
+    SubscribedProductSerializer,
 )
-from .models import DepositOptions, DepositProduct, SubscribedProduct
+from .models import DepositOptions, DepositProduct, SubscribedProduct,SavingOptions,SavingProduct,SubscribedSaving
 from django.http import JsonResponse
 from rest_framework import status
 from accounts.models import User
@@ -39,6 +42,56 @@ def index(request):
     url = f"http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json?auth={api_key}&topFinGrpNo=020000&pageNo=1"
     response = requests.get(url).json()
     return Response(response)
+
+
+@api_view(["GET"])
+def save_saving_data(request):
+    api_key = "bfb3b88bf28e201b6a11b0ddadcdc8c9"
+    url = f'http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json?auth={api_key}&topFinGrpNo=020000&pageNo=1'
+    records = SavingProduct.objects.all()
+    records.delete()
+    records2 = SavingOptions.objects.all()
+    records2.delete()
+    response = requests.get(url).json()
+    baseList = response.get("result").get("baseList")
+    optionList = response.get("result").get("optionList")
+    for idx in range(len(baseList)):
+        save_basedata = {
+            "fin_co_no": baseList[idx]["fin_co_no"],
+            "fin_prdt_cd": baseList[idx]["fin_prdt_cd"],
+            "kor_co_nm": baseList[idx]["kor_co_nm"],
+            "fin_prdt_nm": baseList[idx]["fin_prdt_nm"],
+            "join_deny": baseList[idx]["join_deny"],
+            "join_member": baseList[idx]["join_member"],
+            "join_way": baseList[idx]["join_way"],
+            "spcl_cnd": baseList[idx]["spcl_cnd"],
+            "max_limit": baseList[idx]["max_limit"],
+            "etc_note": baseList[idx]["etc_note"],
+            "dcls_end_day": baseList[idx]["dcls_end_day"],
+        }
+    # print(save_basedata)
+
+        baseserializer = SavingProductSerializer(data=save_basedata)
+        if baseserializer.is_valid():
+            baseserializer.save()
+
+    for idx in range(len(optionList)):
+        save_optiondata = {
+            "deposit_product": optionList[idx]["fin_prdt_cd"],
+            "intr_rate_type": optionList[idx]["intr_rate_type"],
+            "intr_rate_type_nm": optionList[idx]["intr_rate_type_nm"],
+            "save_trm": optionList[idx]["save_trm"],
+            "intr_rate": optionList[idx]["intr_rate"],
+            "intr_rate2": optionList[idx]["intr_rate2"],
+        }
+        optionserializer = SavingOptionsSerializer(data=save_optiondata)
+        if optionserializer.is_valid(raise_exception=True):
+            optionserializer.save()
+
+
+    return Response({"message": "okay"})
+
+
 
 @api_view(["GET"])
 def save_deposit_data(request):

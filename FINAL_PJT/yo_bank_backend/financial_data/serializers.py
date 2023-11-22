@@ -24,11 +24,11 @@ class SavingProductSerializer(serializers.ModelSerializer):
         model = SavingProduct
         fields = '__all__'
 
-# class SavingOptionsSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = SavingOptions
-#         fields = '__all__'
-#         depth = 1  # 관련 SavingProduct의 직렬화를 위해 depth 사용
+class SavingOptionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavingOptions
+        fields = '__all__'
+        depth = 1  # 관련 SavingProduct의 직렬화를 위해 depth 사용
 
 class SubscribedProductSerializer(serializers.ModelSerializer):
     class Meta:

@@ -6,6 +6,7 @@ urlpatterns = [
     path("", views.index),
     # 2. 예보 데이터 중 원하는 데이터만 DB에 저장
     path("save-deposit-data/", views.save_deposit_data),
+    path("save-saving-data/", views.save_saving_data),
     path("signup_deposit/<int:option_pk>", views.signup_deposit),
     path("deposit_product_list/", views.deposit_product_list),
     path("get_deposit_recommend/", views.get_deposit_recommend),
