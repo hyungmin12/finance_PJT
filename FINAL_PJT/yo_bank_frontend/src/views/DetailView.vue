@@ -22,6 +22,7 @@
       <p>수정일 : {{ article.updated_at }}</p>
       <button @click="updateArticle">수정하기</button>
       <button @click="deleteArticle">삭제하기</button>
+      <button @click="goCommunity">돌아가기</button>
     </div>
   </div>
 </template>
@@ -55,6 +56,10 @@ const updateArticle = function() {
   router.push({ name: 'UpdateView', params: { id: route.params.id }})
 }
 
+const goCommunity = function(){
+  router.push({ name: 'Community1View'})
+}
+
 const deleteArticle = function() {
   axios({
     method: 'DELETE',
@@ -62,11 +67,11 @@ const deleteArticle = function() {
   })
     .then((res) => {
       store.getArticles()
-      router.push({name:'ArticleView'})
+      router.push({name:'Community1View'})
     })
     .catch((err) => {
       console.log(err)
-      router.push({name:'ArticleView'})
+      router.push({name:'Community1View'})
     })
 }
 

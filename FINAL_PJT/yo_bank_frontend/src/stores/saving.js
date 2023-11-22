@@ -3,6 +3,12 @@ import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+// 1. getSavingitem구현
+// 2. getSavingList구현
+
+
+
+
 export const useSavingStore = defineStore('saving', () => {
   const router = useRouter()
   const Savings = ref([])
@@ -10,30 +16,26 @@ export const useSavingStore = defineStore('saving', () => {
   // const change = ref(null)
 
   const getSavingitem = function(){
-    //아이템처리
+    
     axios({
       method:"get",
-      url:"http://127.0.0.1:8000/financial_data/save-deposit-data/"
+      url:"http://127.0.0.1:8000/financial_data/save-saving-data/"
     })
     .then((res)=>{
       // console.log("o")
       getSavingList()
-      console.log("get_deposit_item")
+      console.log("get_saving_item")
     })
     .catch((err)=>{
       console.log(err)
     })
   }
 
-  // change = computed(()=>{
-  //   getDepositList()
-  // })
-
   const getSavingList = function(){
     //리스트 처리
     axios({
       method:"get",
-      url:"http://127.0.0.1:8000/financial_data/deposit_product_list/"
+      url:"http://127.0.0.1:8000/financial_data/saving_product_list/"
     })
     .then((res)=>{
       Savings.value = res.data

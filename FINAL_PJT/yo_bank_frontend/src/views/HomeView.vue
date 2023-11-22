@@ -23,14 +23,17 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-<div class="container d-flex flex-row justify-content-center">
+<div v-if="store.isLogin" class="container d-flex flex-row justify-content-center">
   <FinanceComponent class="m-5"/><TravelComponent class="m-5"/>
 </div>
+<h1 v-if="!store.isLogin">로그인 해주세요</h1>
 </template>
 
 <script setup>
   import FinanceComponent from '@/components/FinanceComponent.vue';
   import TravelComponent from '@/components/TravelComponent.vue';
+  import { useCounterStore } from '@/stores/counter';
+  const store = useCounterStore()
 </script>
 
 <style scoped>

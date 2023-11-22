@@ -18,17 +18,13 @@
         <tr class="th">
           <th scope="col" style="background-color: rgb(235, 233, 233);">아이디</th>
           <th scope="col" >
-            <form @submit.prevent="logIn">
               <input type="text" v-model.trim="username" class="login-text">
-            </form>
           </th>
         </tr>
         <tr>
           <th scope="col" style="background-color: rgb(235, 233, 233);">비밀번호</th>
           <th scope="col">
-            <form @submit.prevent="logIn">
               <input type="password" v-model.trim="password" class="login-text">
-            </form>
           </th>
         </tr>
         <input @click="logIn" type="submit" value="로그인">

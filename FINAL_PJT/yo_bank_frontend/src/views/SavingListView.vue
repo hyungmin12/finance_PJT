@@ -16,9 +16,6 @@ const store = useSavingStore()
 onMounted(async () => {
   // 첫 번째 비동기 함수 호출
   await store.getSavingitem()
-
-  // 첫 번째 함수가 완료된 후에 두 번째 비동기 함수 호출
-  // await store.getDepositList()
 });
 
 

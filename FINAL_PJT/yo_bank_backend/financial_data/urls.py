@@ -9,6 +9,7 @@ urlpatterns = [
     path("save-saving-data/", views.save_saving_data),
     path("signup_deposit/<int:option_pk>", views.signup_deposit),
     path("deposit_product_list/", views.deposit_product_list),
+    path("saving_product_list/", views.saving_product_list),
     path("get_deposit_recommend/", views.get_deposit_recommend),
 ]
 

@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody> 
-        <tr class="hoverable-row">
+        <tr v-if="article" class="hoverable-row">
           <RouterLink :to="{ name: 'DetailView', params: { id: article.id }}">
             <th scope="row">{{ article.id }}</th>
             <td>{{ article.title }}</td>

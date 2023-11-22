@@ -32,7 +32,7 @@
     const route = useRoute()
     
     onMounted(() => {
-        console.log(route.params.id)
+      console.log(route.params.id)
       title.value = route.query.title
       content.value = route.query.content
       articleId.value = route.params.id;

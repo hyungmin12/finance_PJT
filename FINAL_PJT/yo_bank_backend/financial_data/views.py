@@ -13,6 +13,7 @@ from .serializers import (
     DepositProductWithOptionsSerializer,
     SavingProductSerializer,
     SavingOptionsSerializer,
+    SavingProductWithOptionsSerializer,
     SubscribedProductSerializer,
 )
 from .models import DepositOptions, DepositProduct, SubscribedProduct,SavingOptions,SavingProduct,SubscribedSaving
@@ -33,6 +34,11 @@ from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
 def deposit_product_list(request):
     deposit_products = DepositProduct.objects.all()
     serializer = DepositProductWithOptionsSerializer(deposit_products, many=True)
+    return Response(serializer.data)
+
+def saving_product_list(request):
+    saving_products = SavingProduct.objects.all()
+    serializer = SavingProductWithOptionsSerializer(saving_products, many=True)
     return Response(serializer.data)
 
 
@@ -77,7 +83,7 @@ def save_saving_data(request):
 
     for idx in range(len(optionList)):
         save_optiondata = {
-            "deposit_product": optionList[idx]["fin_prdt_cd"],
+            "saving_product": optionList[idx]["fin_prdt_cd"],
             "intr_rate_type": optionList[idx]["intr_rate_type"],
             "intr_rate_type_nm": optionList[idx]["intr_rate_type_nm"],
             "save_trm": optionList[idx]["save_trm"],
