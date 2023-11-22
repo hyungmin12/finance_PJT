@@ -31,7 +31,7 @@
             </form>
           </th>
         </tr>
-        <input type="submit" value="로그인" class="submit">
+        <input @click="logIn" type="submit" value="로그인">
       </thead>
     </table>
   </div>

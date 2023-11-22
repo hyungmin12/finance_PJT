@@ -1,8 +1,5 @@
 <template>
   <header>
-    <form @submit.prevent="store.logOut">
-        <input type="submit" value="logOut">
-    </form>
     <top/>
     <!-- <RecommendedFinancialProducts/> -->
   </header>

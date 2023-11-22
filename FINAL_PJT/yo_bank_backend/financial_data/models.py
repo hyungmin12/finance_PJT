@@ -30,32 +30,6 @@ class DepositProduct(models.Model):
     dcls_end_day = models.TextField(null=True)
 
 
-class DepositOptions(models.Model):
-    deposit_product = models.ForeignKey(DepositProduct, on_delete=models.CASCADE, related_name='options', to_field='fin_prdt_cd')
-    intr_rate_type = models.TextField(null=True)
-    intr_rate_type_nm = models.TextField(null=True)
-    save_trm = models.IntegerField(null=True)
-    intr_rate = models.FloatField(null=True)
-    intr_rate2 = models.FloatField(null=True)
-
-    def __str__(self):
-        return f"{self.deposit_product.fin_prdt_cd} - {self.intr_rate_type}"
-
-
-# class DepositOptions(models.Model):
-#     # 금융상품코드
-#     fin_prdt_cd = models.TextField(null=True)
-#     # 저축금리유형
-#     intr_rate_type = models.TextField(null=True)
-#     # 저축금리유형명
-#     intr_rate_type_nm = models.TextField(null=True)
-#     # 저축기간(개월)
-#     save_trm = models.IntegerField(null=True)
-#     # 저축금리
-#     intr_rate = models.FloatField(null=True)
-#     # 최고우대금리
-#     intr_rate2 = models.FloatField(null=True)
-
 class SavingProduct(models.Model):
     # 금융상품코드
     fin_prdt_cd = models.TextField(null=True,unique=True)
@@ -79,6 +53,20 @@ class SavingProduct(models.Model):
     etc_note = models.TextField(null=True)
     # 공시 종료일
     dcls_end_day = models.TextField(null=True)
+
+
+
+class DepositOptions(models.Model):
+    deposit_product = models.ForeignKey(DepositProduct, on_delete=models.CASCADE, related_name='options', to_field='fin_prdt_cd')
+    intr_rate_type = models.TextField(null=True)
+    intr_rate_type_nm = models.TextField(null=True)
+    save_trm = models.IntegerField(null=True)
+    intr_rate = models.FloatField(null=True)
+    intr_rate2 = models.FloatField(null=True)
+
+    def __str__(self):
+        return f"{self.deposit_product.fin_prdt_cd} - {self.intr_rate_type}"
+
 
 class SavingOptions(models.Model):
     saving_product = models.ForeignKey(SavingProduct, on_delete=models.CASCADE, related_name='options', to_field='fin_prdt_cd')
@@ -133,32 +121,32 @@ class SubscribedProduct(models.Model):
 
 
 
-# class SubscribedSaving(models.Model):
-#         # 가입한 유저
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     # 금융상품코드
-#     fin_prdt_cd = models.TextField(null=True)
-#     # 금융회사명
-#     kor_co_nm = models.TextField(null=True)
-#     # 금융상품명
-#     fin_prdt_nm = models.TextField(null=True)
-#     # 최고한도
-#     max_limit = models.IntegerField(null=True)
-#     # 가입액
-#     saving_amount = models.IntegerField()
-#     #공시 종료일
-#     dcls_end_day = models.TextField(null=True)
-#     # 적립유형
-#     rsrv_type = models.TextField(null=True)
-#     # 적립유형명
-#     rsrv_type_nm = models.TextField(null=True)
-#     # 저축금리유형
-#     intr_rate_type = models.TextField(null=True)
-#     # 저축금리유형명
-#     intr_rate_type_nm = models.TextField(null=True)
-#     # 저축기간(개월)
-#     save_trm = models.IntegerField(null=True)
-#     # 저축금리
-#     intr_rate = models.FloatField(null=True)
-#     # 최고우대금리
-#     intr_rate2 = models.FloatField(null=True)
+class SubscribedSaving(models.Model):
+        # 가입한 유저
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # 금융상품코드
+    fin_prdt_cd = models.TextField(null=True)
+    # 금융회사명
+    kor_co_nm = models.TextField(null=True)
+    # 금융상품명
+    fin_prdt_nm = models.TextField(null=True)
+    # 최고한도
+    max_limit = models.IntegerField(null=True)
+    # 가입액
+    saving_amount = models.IntegerField()
+    #공시 종료일
+    dcls_end_day = models.TextField(null=True)
+    # 적립유형
+    rsrv_type = models.TextField(null=True)
+    # 적립유형명
+    rsrv_type_nm = models.TextField(null=True)
+    # 저축금리유형
+    intr_rate_type = models.TextField(null=True)
+    # 저축금리유형명
+    intr_rate_type_nm = models.TextField(null=True)
+    # 저축기간(개월)
+    save_trm = models.IntegerField(null=True)
+    # 저축금리
+    intr_rate = models.FloatField(null=True)
+    # 최고우대금리
+    intr_rate2 = models.FloatField(null=True)

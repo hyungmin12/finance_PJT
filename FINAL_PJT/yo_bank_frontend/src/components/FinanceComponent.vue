@@ -12,15 +12,22 @@
       </thead>
       <tbody> 
         <tr class="hoverable-row">
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>ddssssssssssasdasdasdsssd</td>
-          <td>ddd</td>
+          <RouterLink :to="{ name: 'DetailView', params: { id: article.id }}">
+            <th scope="row">{{ article.id }}</th>
+            <td>{{ article.title }}</td>
+            <td>{{ article.content }}</td>
+            <td>{{ article.content }}</td>
+            <td>{{ article.content }}</td>
+            <!-- [Detail] -->
+          </RouterLink>
         </tr>
+        <div>
+    <hr>
+  </div>
       </tbody>
     </table>
   </div>
+
 </template>
 
 <script setup>
@@ -28,12 +35,20 @@ import { onMounted } from 'vue'
 import { useCounterStore } from '@/stores/counter'
 import { RouterLink } from 'vue-router'
 import ArticleList from '@/components/ArticleList.vue'
+import ArticleListItem from '@/components/ArticleListItem.vue'
 
 const store = useCounterStore()
 
 onMounted(() => {
   store.getArticles()
 })
+
+defineProps({
+  article: Object
+})
+
+
+
 </script>
 
 <style scoped>

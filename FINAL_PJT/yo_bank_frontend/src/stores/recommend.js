@@ -8,7 +8,7 @@ import { useCounterStore } from '@/stores/counter'
 
 export const useRecommendStore = defineStore('recommend', () => {
   // user 별로 1~50 51~100 101~150 151~200 201~300 301이상으로 userGrade에 딕셔너리 형태로 저장하기
-  const userGrade = ref({})
+  const userDepositRecommended = ref({})
   const userStore = useCounterStore()
   const tokens = ref(null)
   if (userStore.token != undefined){
@@ -28,7 +28,7 @@ export const useRecommendStore = defineStore('recommend', () => {
     .then((res)=>{
       console.log(tokens,"==========")
       console.log(res.data)
-      userGrade.value = res.data
+      userDepositRecommended.value = res.data
     })
     .catch((err)=>{
       console.log(err.value)
@@ -36,5 +36,5 @@ export const useRecommendStore = defineStore('recommend', () => {
   }
   
 
-  return { getDepositRecommended, }
+  return { getDepositRecommended, userDepositRecommended, }
 }, { persist: true })

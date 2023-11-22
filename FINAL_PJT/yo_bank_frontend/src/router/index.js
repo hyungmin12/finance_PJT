@@ -9,6 +9,10 @@ import CreateView from '@/views/CreateView.vue'
 import UpdateView from '@/views/UpdateView.vue'
 import Community1View from '@/views/Community1View.vue'
 import Community2View from '@/views/Community2View.vue'
+import RecommendedFinancialProducts from '@/components/RecommendedFinancialProducts.vue'
+import SavingListView from '@/views/SavingListView.vue'
+import UserProfileView from '@/views/UserProfileView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,12 +22,12 @@ const router = createRouter({
       name: 'HomeView',
       component: HomeView
     },
-    {
-      // 다시 건들기
-      path: '/aa',
-      name: 'ArticleView',
-      component: ArticleView
-    },
+    // {
+    //   // 다시 건들기
+    //   path: '/aa',
+    //   name: 'ArticleView',
+    //   component: ArticleView
+    // },
     {
       path: '/signup',
       name: 'SignUpView',
@@ -38,6 +42,11 @@ const router = createRouter({
       path: '/depositList',
       name: 'DepositListView',
       component: DepositListView
+    },
+    {
+      path: '/savingList',
+      name: 'SavingListView',
+      component: SavingListView
     },
     {
       path: '/community1',
@@ -63,6 +72,16 @@ const router = createRouter({
       path: '/update/:id',
       name: 'UpdateView',
       component: UpdateView
+    },
+    {
+      path: '/recommend',
+      name: 'recommendView',
+      component: RecommendedFinancialProducts
+    },
+    {
+      path: '/userprofile',
+      name: 'UserProfileView',
+      component: UserProfileView
     },
   ]
 })

@@ -109,7 +109,7 @@ export const useCounterStore = defineStore('counter', () => {
     })
       .then((res) => {
         token.value = res.data.key
-        router.push({ name: 'ArticleView' })
+        router.push({ name: 'HomeView' })
       })
       .catch((err) => {
         console.log(err)
@@ -123,6 +123,7 @@ export const useCounterStore = defineStore('counter', () => {
     })
       .then((res) => {
         token.value = null
+        console.log("logOuttttttt====")
         router.push({ name: 'HomeView' })
       })
       .catch((err) => {

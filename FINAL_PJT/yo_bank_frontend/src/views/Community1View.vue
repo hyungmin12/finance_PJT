@@ -19,15 +19,25 @@
         </RouterLink>
       </div>
     </div>
-    <div class="container d-flex flex-row justify-content-center">
-        <FinanceComponent class="m-5"/>
-      </div>
+    <div>
+      <FinanceComponent 
+        v-for="article in store.articles"
+        :key="article.id"
+        :article="article"
+      />
     </div>
+  </div>
 </template>
 
 <script setup>
-import FinanceComponent from '@/components/FinanceComponent.vue';
 import { RouterLink } from 'vue-router'
+import { useCounterStore } from '@/stores/counter'
+import FinanceComponent from '@/components/FinanceComponent.vue'
+
+const store = useCounterStore()
+
+
+
 </script>
 
 <style scoped>

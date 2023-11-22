@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+
 import { onMounted } from 'vue'
 import { useCounterStore } from '@/stores/counter'
 import { RouterLink } from 'vue-router'
