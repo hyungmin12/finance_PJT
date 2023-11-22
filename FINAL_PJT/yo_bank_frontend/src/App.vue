@@ -9,13 +9,6 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { useCounterStore } from '@/stores/counter'
 import top from '@/components/top.vue';
-import DepositListView from '@/views/DepositListView.vue';
-
-import ExchangeComponents from '@/components/ExchangeComponents.vue'
-import KakaoMapComponents from '@/components/KakaoMapComponents.vue'
-import { useProductStore } from '@/stores/product.js'
-
-import RecommendedFinancialProducts from '@/components/RecommendedFinancialProducts.vue'
 
 
 const store = useCounterStore()

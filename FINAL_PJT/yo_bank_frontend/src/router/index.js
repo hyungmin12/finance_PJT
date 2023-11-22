@@ -12,6 +12,8 @@ import Community2View from '@/views/Community2View.vue'
 import RecommendedFinancialProducts from '@/components/RecommendedFinancialProducts.vue'
 import SavingListView from '@/views/SavingListView.vue'
 import UserProfileView from '@/views/UserProfileView.vue'
+import KakaoMapView from '@/views/KakaoMapView.vue'
+import ExchangeView from '@/views/ExchangeView.vue'
 
 
 const router = createRouter({
@@ -82,6 +84,16 @@ const router = createRouter({
       path: '/userprofile',
       name: 'UserProfileView',
       component: UserProfileView
+    },
+    {
+      path: '/exchange',
+      name: 'ExchangeView',
+      component: ExchangeView
+    },
+    {
+      path: '/kakaomap',
+      name: 'KakaoMapView',
+      component: KakaoMapView
     },
   ]
 })

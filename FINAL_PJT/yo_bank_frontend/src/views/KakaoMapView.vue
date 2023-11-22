@@ -1,15 +1,17 @@
 <template>
   <div>
     <div>
-      <input v-model="searchKeyword" placeholder="주소를 검색하세요" />
-      <button @click="search">검색</button>
+      <div class="search-bar d-flex">
+        <input class="search-input" v-model="searchKeyword" placeholder="주소를 검색하세요" />
+        <button @click="search" class="d-flex btn btn-primary search-button " ><span class="align-middle">검색</span></button>
+      </div>
     </div>
-    <div ref="map" style="width: 100%; height: 350px;"></div>
-    <div v-if="searchedBanks.length > 0">
-      <h2>검색된 은행</h2>
+    <div ref="map" style="width: 100%; height: 100vh;"></div>
+    <div style="z-index: 9;" class="search-div p-4" v-if="searchedBanks.length > 0">
+      <h2 class="m-3">검색된 은행</h2>
       <ul>
-        <li v-for="bank in searchedBanks" :key="bank.id">
-          {{ bank.place_name }} - {{ bank.address_name }}
+        <li class="fw-bold m-2" v-for="bank in searchedBanks" :key="bank.id">
+          {{ bank.place_name }} - {{ bank.address_name }} 
         </li>
       </ul>
     </div>
@@ -108,10 +110,11 @@ export default {
       window.kakao.maps.event.addListener(marker, 'click', () => {
         this.infowindow.setContent(
           '<div style="padding:5px;font-size:12px;">' +
-            data.place_name +
-            data.address_name +
+            '<p>'+data.place_name + data.address_name + '</p>' +
+            // data.road_address_name+
           '</div>'
         );
+        console.log(data)
         this.infowindow.open(this.map, marker);
       });
 
@@ -135,5 +138,49 @@ export default {
 </script>
 
 <style scoped>
-/* 필요한 스타일이 있다면 여기에 추가하세요 */
+/* .search-button {
+  position: absolute;
+  border: 1px solid black;
+  right: 0px;
+  height: 40px;
+  width: 100px;
+} */
+
+.search-bar {
+  z-index: 3;
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.search-div{
+  background-color: hsla(0, 0%, 100%, 0.8);
+  position: absolute;
+  top: 60%;
+  left: 18%;
+  /* opacity: 50%; */
+  height: 100vh;
+  transform: translate(-50%, -50%);
+}
+
+.search-input {
+  position: relative;
+  border: 1px solid black;
+  width: 400px;
+  height: 40px;
+}
+
+.search-button {
+  position: absolute;
+  border: 1px solid black;
+  right: 0px;
+  height: 40px;
+  width: 100px;
+  display: flex;
+  align-items: center; /* 텍스트를 세로로 가운데 정렬 */
+}
+
+.align-middle {
+  margin: auto; /* 텍스트를 가로로 가운데 정렬 */
+}
 </style>

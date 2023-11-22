@@ -177,11 +177,53 @@ def signup_deposit(request, option_pk):
             "intr_rate": depositOption.intr_rate,
             "intr_rate2": depositOption.intr_rate2,
         }
+
     serializer = SubscribedProductSerializer(data=save_data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=user)
-        return Response({"message": "okay"})
+    return Response({"message": "okay"})
 
+# @permission_classes([IsAuthenticatedOrReadOnly])
+# @api_view(["POST"])
+# @login_required
+# def signup_deposit(request, option_pk):
+#     data = json.loads(request.body.decode('utf-8'))
+#     user = request.user
+#     depositOption = DepositOptions.objects.get(id=option_pk)
+#     deposit_product_instance = depositOption.deposit_product
+
+#     save_data = None  # 초기값을 설정합니다.
+
+#     if SubscribedProduct.objects.filter(user_id=user.id, fin_prdt_cd=deposit_product_instance.fin_prdt_cd, save_trm=depositOption.save_trm):
+#         return Response({'message': 'already'})
+#     if user.left_money_for_financial == 1:
+#         user.left_money_for_financial = user.money_for_financial
+#     if user.money_for_financial != 0 and user.left_money_for_financial - int(data['amount']) >= 0:
+#         user.used_money_for_financial += int(data['amount'])
+#         user.left_money_for_financial = user.money_for_financial - user.used_money_for_financial
+#         user.save()
+#         save_data = {
+#             "type": "D",
+#             "fin_prdt_cd": deposit_product_instance.fin_prdt_cd,
+#             "kor_co_nm": deposit_product_instance.kor_co_nm,
+#             "fin_prdt_nm": deposit_product_instance.fin_prdt_nm,
+#             "max_limit": deposit_product_instance.max_limit,
+#             "amount": int(data['amount']),
+#             "dcls_end_day": deposit_product_instance.dcls_end_day,
+#             "intr_rate_type": depositOption.intr_rate_type,
+#             "intr_rate_type_nm": depositOption.intr_rate_type_nm,
+#             "save_trm": depositOption.save_trm,
+#             "intr_rate": depositOption.intr_rate,
+#             "intr_rate2": depositOption.intr_rate2,
+#         }
+
+#     if save_data is not None:  # save_data가 정의되었는지 확인합니다.
+#         serializer = SubscribedProductSerializer(data=save_data)
+#         if serializer.is_valid(raise_exception=True):
+#             serializer.save(user=user)
+#             return Response({"message": "okay"})
+#     else:
+#         return Response({'message': 'already'})
 
 
 @permission_classes([IsAuthenticatedOrReadOnly])

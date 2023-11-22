@@ -9,32 +9,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="deposit of store.changeDeposits" :key="deposit.id">
-          <td>{{ deposit.kor_co_nm }}</td>
-          <td>{{ deposit.fin_prdt_nm }}</td>
-            <button @click="toggleDetails(deposit.id)">Toggle Details</button>
-              <div v-if="showDetails[deposit.id]">
-                <div v-for="option of deposit.options" :key="option.save_trm">
-                  <hr />
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>금융기관</th>
-                        <th>상품</th>
-                        <th>자세히 보기</th>
-                      </tr>
-                    </thead>
-                    <td>예치기간 : {{ option.save_trm }}</td>
-                    <td>저축금리 : {{ option.intr_rate }}</td>
-                    <td>우대금리 : {{ option.intr_rate2 }}</td>
-                  </table>
-                  <form @submit.prevent="signUpThisProduct(option.id)">
-                    <input v-model="amount" type="text">
-                    <input type="submit" value="가입하기">
-                  </form>
-                </div>
-              </div>
-        </tr>
+        <Depositdetail 
+        v-for="deposit of store.changeDeposits" :key="deposit.id"
+        :deposit="deposit"
+        />
       </tbody>
     </table>
   </div>
@@ -46,6 +24,7 @@ import { ref } from "vue";
 import { useProductStore } from "@/stores/product.js";
 import { useCounterStore } from "@/stores/counter.js";
 import axios from "axios";
+import Depositdetail from '@/components/Depositdetail.vue'
 
 const store = useProductStore();
 const store2 = useCounterStore();
@@ -53,28 +32,6 @@ const showDetails = ref({});
 const token = store2.token;
 const amount = ref(null)
 
-const toggleDetails = (depositId) => {
-  showDetails.value[depositId] = !showDetails.value[depositId];
-};
-
-const signUpThisProduct = function (optionPk) {
-  axios({
-    method: "POST",
-    url: `http://127.0.0.1:8000/financial_data/signup_deposit/${optionPk}`,
-    headers: {
-      Authorization: `Token ${token}`,
-    },
-    data : {
-      amount : amount.value
-    }
-  })
-  .then((res) => {
-    console.log(res.data);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-};
 </script>
 
 <style lang="scss" scoped>
@@ -99,30 +56,4 @@ th {
   color: #ddd;
 }
 
-/* 테이블 올렸을 때 */
-tbody tr:hover {
-  background-color: #d3d3d3;
-  opacity: 0.9;
-  cursor: pointer;
-}
-
-/* 테이블 비율 */
-th:nth-child(1),
-td:nth-child(1) {
-  width: 15%;
-}
-
-th:nth-child(2),
-td:nth-child(2) {
-  width: 55%;
-}
-
-th:nth-child(3),
-td:nth-child(3) {
-  width: 30%;
-}
-
-tr:nth-child(even) {
-  background-color: #fff6f6;
-}
 </style>

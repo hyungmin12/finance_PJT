@@ -14,17 +14,19 @@
             <RouterLink to="/savingList" class="navvar m-5">적금</RouterLink>
           </li>
           <li v-if="store.isLogin" class="nav-item">
-            <RouterLink to="/community1" class="navvar m-5">커뮤니티1</RouterLink>
+            <RouterLink to="/community1" class="navvar m-5">금융계시판</RouterLink>
           </li>
-          <!-- <li v-if="store.isLogin" class="nav-item">
-            <RouterLink to="/community2" class="navvar m-5">커뮤니티2</RouterLink>
-          </li> -->
-
+          <li v-if="store.isLogin" class="nav-item">
+            <RouterLink to="/exchange" class="navvar m-5">환율계산기</RouterLink>
+          </li>
+          <li v-if="store.isLogin" class="nav-item">
+            <RouterLink to="/kakaomap" class="navvar m-5">은행찾기</RouterLink>
+          </li>
           <li v-if="store.isLogin" class="nav-item">
             <RouterLink to="/userprofile" class="navvar m-5">마이페이지</RouterLink>
           </li>
           <li v-if="store.isLogin" class="nav-item">
-            <RouterLink to="/recommend" class="navvar m-5">추천페이지</RouterLink>
+            <RouterLink to="/recommend" class="navvar m-5">예적금추천</RouterLink>
           </li>
 
 
@@ -51,6 +53,7 @@
 
 import { RouterLink, RouterView } from 'vue-router'
 import { useCounterStore } from '@/stores/counter'
+
 
 const store = useCounterStore()
 
