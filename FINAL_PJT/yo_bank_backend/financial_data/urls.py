@@ -13,5 +13,6 @@ urlpatterns = [
     path("saving_product_list/", views.saving_product_list),
     path("get_deposit_recommend/", views.get_deposit_recommend),
     path("get_saving_recommend/", views.get_saving_recommend),
+    path("get_my_subscribed/", views.get_my_subscribed),
 ]
 

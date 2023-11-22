@@ -796,3 +796,11 @@ def get_saving_recommend(request):
                 rank += 1
                 result_list.append(result_dic)
         return Response(result_list)
+    
+@api_view(["GET"])
+def get_my_subscribed(request):
+    print(request.user)
+    subs = SubscribedProduct.objects.filter(user=request.user)
+    serializer = SubscribedProductSerializer(subs, many=True)
+    
+    return Response(serializer.data)

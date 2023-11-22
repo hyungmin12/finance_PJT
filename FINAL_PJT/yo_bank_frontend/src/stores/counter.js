@@ -66,8 +66,8 @@ export const useCounterStore = defineStore('counter', () => {
               nickname,
               email,
               age,
-              used_money_for_financial,
-              left_money_for_financial,
+              // used_money_for_financial,
+              // left_money_for_financial,
               money_for_financial,
               money_for_travel,
               salary, } = payload
