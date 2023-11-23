@@ -132,6 +132,7 @@ const signUpThisSaving = function (optionPk) {
     }
   })
   .then((res) => {
+    amount.value = null
     console.log(res.data);
   })
   .catch((err) => {
