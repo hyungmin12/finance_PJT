@@ -32,6 +32,25 @@ const showDetails = ref({});
 const token = store2.token;
 const amount = ref(null)
 
+
+const signUpThisProduct = function (optionPk) {
+  axios({
+    method: "POST",
+    url: `http://127.0.0.1:8000/financial_data/signup_deposit/${optionPk}`,
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+    data : {
+      amount : amount.value
+    }
+  })
+  .then((res) => {
+    console.log(res.data);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -12,6 +12,26 @@ export const useRecommendStore = defineStore('recommend', () => {
   const userSavingRecommended = ref({})
   const userStore = useCounterStore()
   const tokens = ref(null)
+  const myDeposit = ref(null)
+
+  const getMyDeposit = function(){
+    axios({
+      method : 'get',
+      url : 'http://127.0.0.1:8000/financial_data/get_my_deposit',
+      headers: {
+        Authorization: `Token ${tokens.value}`
+      }
+    })
+    .then((res)=>{
+      myDeposit.value = res.data
+      // console.log(myDeposit.value)
+    })
+    .catch((err)=>{
+      console.log(err.value)
+    })
+  }
+
+
   if (userStore.token != undefined){
     tokens.value = userStore.token
     // console.log(tokens.value)
@@ -27,8 +47,6 @@ export const useRecommendStore = defineStore('recommend', () => {
       }
     })
     .then((res)=>{
-      console.log(tokens,"==========")
-      console.log(res.data)
       userDepositRecommended.value = res.data
     })
     .catch((err)=>{
@@ -45,15 +63,14 @@ export const useRecommendStore = defineStore('recommend', () => {
       }
     })
     .then((res)=>{
-      console.log(tokens,"==========")
-      console.log(res.data)
       userSavingRecommended.value = res.data
     })
     .catch((err)=>{
       console.log(err.value)
     })
   }
-  
 
-  return { userSavingRecommended, getSavingRecommended, getDepositRecommended, userDepositRecommended, }
+
+
+  return { myDeposit,getMyDeposit, userSavingRecommended, getSavingRecommended, getDepositRecommended, userDepositRecommended, }
 }, { persist: true })

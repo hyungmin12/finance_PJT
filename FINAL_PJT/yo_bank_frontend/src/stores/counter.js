@@ -97,6 +97,44 @@ export const useCounterStore = defineStore('counter', () => {
       })
   }
 
+
+  const goUpdateUser = function (payload) {
+    const {   
+              password1,
+              password2,
+              nickname,
+              email,
+              money_for_financial,
+              money_for_travel,
+              salary, 
+                    } = payload
+    axios({
+      method: 'put',
+      url: `${USER_API}/check/user_update/`,
+      data: {
+              password1: password1,
+              password2: password2,
+              nickname: nickname,
+              email: email,
+              money_for_financial: money_for_financial,
+              money_for_travel: money_for_travel,
+              salary : salary,
+            },
+      headers: {
+        Authorization: `Token ${token.value}`
+      }
+      })
+      .then((res) => {
+        router.push({name:'HomeView'})
+      })
+      .catch((err) => {
+        alert("제대로 입력하세요잇")
+        console.error(err)
+      })
+  }
+
+
+
   const logIn = function (payload) {
     const { username, password } = payload
 
@@ -147,5 +185,5 @@ export const useCounterStore = defineStore('counter', () => {
     })
   }
 
-  return { articles, USER_API, getArticles, signUp, logIn, token, isLogin, logOut, exchange, exchange_data, getUserInformations, userInformations}
+  return { goUpdateUser, articles, USER_API, getArticles, signUp, logIn, token, isLogin, logOut, exchange, exchange_data, getUserInformations, userInformations}
 }, { persist: true })

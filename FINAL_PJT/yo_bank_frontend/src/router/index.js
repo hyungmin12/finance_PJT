@@ -14,7 +14,9 @@ import SavingListView from '@/views/SavingListView.vue'
 import UserProfileView from '@/views/UserProfileView.vue'
 import KakaoMapView from '@/views/KakaoMapView.vue'
 import ExchangeView from '@/views/ExchangeView.vue'
-
+import DepositAndSavingView from '@/views/DepositAndSavingView.vue'
+import UpdateUserView from '@/views/UpdateUserView.vue'
+import UserProfileView2 from '@/views/UserProfileView2.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,12 +26,6 @@ const router = createRouter({
       name: 'HomeView',
       component: HomeView
     },
-    // {
-    //   // 다시 건들기
-    //   path: '/aa',
-    //   name: 'ArticleView',
-    //   component: ArticleView
-    // },
     {
       path: '/signup',
       name: 'SignUpView',
@@ -44,6 +40,11 @@ const router = createRouter({
       path: '/depositList',
       name: 'DepositListView',
       component: DepositListView
+    },
+    {
+      path: '/depositandsaving',
+      name: 'DepositAndSavingView',
+      component: DepositAndSavingView
     },
     {
       path: '/savingList',
@@ -95,21 +96,35 @@ const router = createRouter({
       name: 'KakaoMapView',
       component: KakaoMapView
     },
+    // {
+    //   path: '/updateuser',
+    //   name: 'UpdateUserView',
+    //   component: UpdateUserView
+    // },
+    {
+      path: '/userprofile',
+      name: 'UserProfileView',
+      component: UserProfileView,
+      children:[
+        {
+          path: '/UpdateUserView',
+          name: 'UpdateUserView',
+          component: UpdateUserView,
+        },
+        {
+          path: '/userprofileview2',
+          name: 'UserProfileView2',
+          component: UserProfileView2
+        },
+        {
+          path: '/aa',
+          name: 'ArticleView',
+          component: ArticleView
+        },
+      ]
+    },
+    
   ]
 })
-
-import { useCounterStore } from '@/stores/counter'
-
-// router.beforeEach((to, from) => {
-//   const store = useCounterStore()
-//   if (to.name === 'ArticleView' && !store.isLogin) {
-//     window.alert('로그인이 필요합니다.')
-//     return { name: 'LogInView' }
-//   }
-//   if ((to.name === 'SignUpView' || to.name === 'LogInView') && (store.isLogin)) {
-//     window.alert('이미 로그인 했습니다.')
-//     return { name: 'ArticleView' }
-//   }
-// })
 
 export default router

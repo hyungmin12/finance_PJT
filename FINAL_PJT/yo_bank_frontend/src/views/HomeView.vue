@@ -1,45 +1,167 @@
 <template>
-<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner" style="height: 100px;">
-    <div class="carousel-item active" >
-      <img src="src/assets/images/img1.jpg" alt="...">
-      <!-- <img src="..." class="d-block w-100" alt="..."> -->
+  <div class="home-image">
+    <img src="src/assets/images/home.jpg" alt="">
+    <div v-if="store.isLogin"  class="form-container2" style="color:white; text-align: center; width: 100%; height: 400px;">
+      <h1>환영합니다</h1>
+      <br>
+      <h1>자신의 투자목적에 맞는 금융게시판, 금융 추천 상품을 만나보세요</h1>
     </div>
-    <div class="carousel-item">
-      <img src="src/assets/images/img2.jpg" alt="...">
-      <!-- <img src="..." class="d-block w-100" alt="..."> -->
-    </div>
-    <div class="carousel-item">
-      <img src="src/assets/images/img.JPG" alt="...">
-      <!-- <img src="..." class="d-block w-100" alt="..."> -->
-    </div>
+  
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-<div v-if="store.isLogin" class="container d-flex flex-row justify-content-center">
-  <FinanceComponent class="m-5"/><TravelComponent class="m-5"/>
-</div>
-<h1 v-if="!store.isLogin">로그인 해주세요</h1>
-</template>
+    <div v-if="!store.isLogin"  class="login-wrapper login_form form-container" style="width: 400px; height: 400px; background-color: #f4f4f4; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
+    <h2 style="margin-bottom: 20px; text-align: center; color: #333;">로그인</h2>
+    <form @submit.prevent="logIn" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+      <input type="text" v-model.trim="username" placeholder="아이디" class="login-input">
+      <input type="password" v-model.trim="password" placeholder="비밀번호" class="login-input">
+      <button type="submit" class="login-button">로그인</button>
+    </form>
+  </div>
 
-<script setup>
-  import FinanceComponent from '@/components/FinanceComponent.vue';
-  import TravelComponent from '@/components/TravelComponent.vue';
-  import { useCounterStore } from '@/stores/counter';
-  const store = useCounterStore()
-</script>
+  </template>
+  
+  <script setup>
 
-<style scoped>
-img {
-  width: 2000px;
-  height: 530px;
+import { ref } from 'vue'
+import { useCounterStore } from '@/stores/counter'
+
+const store = useCounterStore()
+const username = ref(null)
+const password = ref(null)
+
+const logIn = function () {
+  console.log("======================")
+const payload = {
+  username: username.value,
+  password: password.value
+}
+store.logIn(payload)
 }
 
-</style>
+
+
+
+
+  </script>
+  
+  <style scoped>
+  .container {
+    position: relative;
+  }
+  
+
+  .form-container2 {
+    position: absolute;
+    top: 50%; /* Adjust as needed */
+    left: 50%; /* Adjust as needed */
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .form-container {
+    position: absolute;
+    top: 50%; /* Adjust as needed */
+    left: 50%; /* Adjust as needed */
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    border: 1px solid black;
+    border-radius: 15px;
+    background-color: rgb(238, 235, 235);
+  }
+  .home-image{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.8;
+  }
+  
+  
+  /* 로그인  css */
+  *{
+      padding: 0;
+      margin: 0;
+      border: none;
+  }
+  body{
+      font-size: 14px;
+      font-family: 'Roboto', sans-serif;
+  }
+  .login-wrapper{
+      width: 400px;
+      height: 350px;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  
+  .login-wrapper > h2{
+      font-size: 24px;
+      color: #a3b3f7;
+      margin-bottom: 20px;
+  }
+  #login-form > input{
+      width: 100%;
+      height: 48px;
+      padding: 0 10px;
+      box-sizing: border-box;
+      margin-bottom: 16px;
+      border-radius: 6px;
+      background-color: #F8F8F8;
+  }
+  #login-form > input::placeholder{
+      color: #D2D2D2;
+  }
+  #login-form > input[type="submit"]{
+      color: #fff;
+      font-size: 16px;
+      background-color: #aae8f8;
+      margin-top: 20px;
+  }
+  
+  #login-form > input[type="checkbox"]{
+      display: none;
+  }
+  #login-form > label{
+      color: #999999;
+  }
+  #login-form input[type="checkbox"] + label{
+      cursor: pointer;
+      padding-left: 26px;
+      background-image: url("checkbox.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+  }
+  #login-form input[type="checkbox"]:checked + label{
+      background-image: url("checkbox-active.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+  }
+
+
+  /* Add these styles to your existing styles or in a separate style block */
+
+  .login-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .login-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .login-button:hover {
+    background-color: #45a049;
+  }
+  </style>

@@ -23,18 +23,18 @@
         <p class="text">작성일 : {{ article.created_at }}</p>
         <p class="text">수정일 : {{ article.updated_at }}</p>
 
-        <button v-if="article.user === userId" @click="updateArticle" class="btn btn-secondary text">수정하기</button>
-        <button v-if="article.user === userId" @click="deleteArticle" class="btn btn-secondary text">삭제하기</button>
-        <button @click="goCommunity" class="btn btn-secondary text">돌아가기</button>
-
+        <button v-if="article.user === userId" @click="updateArticle" class="btn btn-outline-secondary text">수정하기</button>
+        <button v-if="article.user === userId" @click="deleteArticle" class="btn btn-outline-secondary text">삭제하기</button>
+        <button @click="goCommunity" class="btn btn-outline-secondary text">돌아가기</button>
+        <hr style="height: 1px; margin: 10px;">
         <div v-for="comment of comments" class="d-flex">
-            <p>댓글: {{ comment.content }}</p>
-            <button v-if="comment.user === userId"  @click="deleteComment(comment.id, article.pk)">댓글 삭제</button>
+            <p class="text">댓글: {{ comment.content }}</p>
+            <button v-if="comment.user === userId"  @click="deleteComment(comment.id, article.pk)" style="width: 96px; height: 35px; border-radius: 8px; margin: 10px;" class="btn btn-outline-secondary">댓글 삭제</button>
         </div>
 
         <form @submit.prevent="createComment">
-          <input type="text" v-model="commentContent">
-          <input type="submit" value="댓글 작성">
+          <input type="text" v-model="commentContent" style=" height: 35px; border-radius: 8px; margin: 10px;">
+          <input type="submit" value="댓글 작성" style="width: 96px; height: 35px; border-radius: 8px; margin: 10px;" class="btn btn-outline-secondary">
         </form>
 
       </div>
@@ -154,7 +154,7 @@ const deleteComment = function(comment_pk, article_pk) {
 <style>
 .detail-content{
   position: absolute;
-  left: 25%;
+  left: 20%;
   top: 50%;
   border: solid 1px black;
   border-radius: 8px;

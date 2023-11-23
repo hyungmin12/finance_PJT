@@ -88,7 +88,7 @@ class SavingOptions(models.Model):
 
 class SubscribedProduct(models.Model):
     # 가입한 유저
-    user = models.ForeignKey(User, on_delete=models.CASCADE,)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subbb")
     # 종류(적금인지 예금인지)
     type = models.TextField(null=True)
     # 금융상품코드

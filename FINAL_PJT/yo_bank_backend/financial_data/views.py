@@ -15,6 +15,7 @@ from .serializers import (
     SavingOptionsSerializer,
     SavingProductWithOptionsSerializer,
     SubscribedProductSerializer,
+    UserSubscribedProductsSerializer
 )
 from .models import DepositOptions, DepositProduct, SubscribedProduct,SavingOptions,SavingProduct
 from django.http import JsonResponse
@@ -273,7 +274,7 @@ def signup_saving(request, option_pk):
 
 @api_view(["GET"])
 def get_deposit_recommend(request):
-    tmp = [[] for _ in range(10001)]
+    tmp = [[] for _ in range(100000)]
     subscribed_products = SubscribedProduct.objects.all()
     ch_money_for_financial = request.user.money_for_financial
     for subscribed_product in subscribed_products:
@@ -286,7 +287,6 @@ def get_deposit_recommend(request):
             intr_rate = subscribed_product.intr_rate
             intr_rate2 = subscribed_product.intr_rate2
             user = get_object_or_404(User, id=user_id)
-            print(user,"======================")
             money_for_financial = user.money_for_financial
             tmp[user_id].append([
                 user_id,
@@ -301,16 +301,16 @@ def get_deposit_recommend(request):
                 deposit_product.join_member,
                 deposit_product.etc_note,
             ])
-            print(tmp[user_id])
-            # print(tmp,"======================================")
     a0to50=[]
     if 0<= ch_money_for_financial <= 500000:
+        print("asdfa")
         for tm in tmp:
             for t in tm:
                 if t:
                     if 0 <=int(t[1])<= 500000:
                         a0to50.append(t)
         dic_0to50 = {}
+        
         for a in a0to50:
             if f'{a[2]},{a[3]},{a[4]}' not in dic_0to50:
                 dic_0to50[f'{a[2]},{a[3]},{a[4]}'] = 1
@@ -318,15 +318,12 @@ def get_deposit_recommend(request):
                 dic_0to50[f'{a[2]},{a[3]},{a[4]}'] += 1
         result_list = []
         rank = 1
-        print("======================================")
         if len(dic_0to50) > 3:
             sorted_items = sorted(dic_0to50.items(), key=lambda x: x[1], reverse=True)
             top_3_keys = [key for key, value in sorted_items[:10]]
             for top in top_3_keys:
                 tops = top.split(',')
-                print("==========================")
                 deposit_product = DepositProduct.objects.get(kor_co_nm=tops[0], fin_prdt_nm=tops[1])
-                print("=========gow==============")
                 fin_prdt_cd_for_deposit = deposit_product.fin_prdt_cd
                 final_options = DepositOptions.objects.filter(deposit_product_id = fin_prdt_cd_for_deposit, save_trm = tops[2])
                 if final_options.exists():
@@ -346,12 +343,13 @@ def get_deposit_recommend(request):
                     'rank' : rank
                 }
                 rank += 1
+                # print("------------=========")
                 result_list.append(result_dic)
         return Response(result_list)
     
 
     if 500001<= ch_money_for_financial <= 1000000:
-        # print("============")
+        print("adsfs222222d")
         for tm in tmp:
             for t in tm:
                 if t:
@@ -561,8 +559,7 @@ def get_deposit_recommend(request):
                 rank += 1
                 result_list.append(result_dic)
         return Response(result_list)
-    
-
+   
 
 
 
@@ -930,3 +927,29 @@ def delete_product(request, subscribed_pk):
         # 객체가 존재하지 않으면 404 에러 반환
         # raise Http404("SubscribedProduct does not exist")
         return Response({'msg':'no object'})
+
+
+@api_view(['GET'])
+def get_my_deposit(request):
+    print(request.user.id)
+    subs = SubscribedProduct.objects.filter(user=request.user)
+    ret = {
+        'fin_prdt_nm' : [],
+        'intr_rate' : [],
+        'intr_rate2' : [],
+    }
+    for sub in subs:
+        ret['fin_prdt_nm'].append(sub.fin_prdt_nm)
+        ret['intr_rate'].append(sub.intr_rate)
+        ret['intr_rate2'].append(sub.intr_rate2)
+        
+    
+    return Response(ret)
+
+
+# @api_view(['GET'])
+# def subcribed_list(request):
+#     user=request.user
+#     if request.method == 'GET':
+#         serializer = UserSubscribedProductsSerializer(user)
+#         return Response(serializer.data)

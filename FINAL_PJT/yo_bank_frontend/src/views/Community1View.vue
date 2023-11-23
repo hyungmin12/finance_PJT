@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1 style="text-align: center; margin-top: 30px;">여기는 __원이하 자산관리 커뮤니티 입니다.</h1>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner all_box ">
         <div class="carousel-item active">

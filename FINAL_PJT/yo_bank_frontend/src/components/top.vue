@@ -8,10 +8,7 @@
     <div>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ma-2 pa-2">
           <li v-if="store.isLogin" class="nav-item">
-            <RouterLink to="/depositList" class="navvar m-5">예금</RouterLink>
-          </li>
-          <li v-if="store.isLogin" class="nav-item">
-            <RouterLink to="/savingList" class="navvar m-5">적금</RouterLink>
+            <RouterLink to="/depositandsaving" class="navvar m-5">예적금</RouterLink>
           </li>
           <li v-if="store.isLogin" class="nav-item">
             <RouterLink to="/community1" class="navvar m-5">금융계시판</RouterLink>
@@ -28,18 +25,14 @@
           <li v-if="store.isLogin" class="nav-item">
             <RouterLink to="/recommend" class="navvar m-5">예적금추천</RouterLink>
           </li>
-
-
           <form v-if="store.isLogin" @submit.prevent="store.logOut">
-            <input type="submit" value="logOut">
+            <input type="submit" value="로그아웃" style="background-color: #f8f9fa; border:none">
           </form>
 
           <li v-if="!store.isLogin" class="nav-item">
-            <RouterLink to="/login" class="navvar m-5">로그인</RouterLink>
-          </li>
-          <li v-if="!store.isLogin" class="nav-item">
             <RouterLink to="/signup" class="navvar m-5">회원가입</RouterLink>
           </li>
+
 
         </ul>
       </div>

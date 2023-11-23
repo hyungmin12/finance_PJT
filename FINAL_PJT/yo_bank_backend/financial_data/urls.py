@@ -15,5 +15,8 @@ urlpatterns = [
     path("get_saving_recommend/", views.get_saving_recommend),
     path("get_my_subscribed/", views.get_my_subscribed),
     path("delete_product/<int:subscribed_pk>", views.delete_product),
+    path("get_my_deposit/", views.get_my_deposit),
+    # path("subcribed_list/", views.subcribed_list),
+    # path("delete_product/<int:subscribed_pk>", views.delete_product),
 ]
 

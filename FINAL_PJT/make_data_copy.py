@@ -80,7 +80,7 @@ file = OrderedDict()
 # 저장 위치는 프로젝트 구조에 맞게 수정합니다.
 save_dir = './yo_bank_backend/financial_data/fixtures/subscribed_data.json'
 len_s = len(financial_products)-1
-N = 20000
+N = 1000
 with open(save_dir, 'w', encoding="utf-8") as f:
     f.write('[')
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import DepositOptions, DepositProduct, SavingOptions, SavingProduct,SubscribedProduct
+from  django.contrib.auth import get_user_model
 
 class DepositProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,6 +25,7 @@ class SubscribedProductSerializer(serializers.ModelSerializer):
         model = SubscribedProduct
         fields = '__all__'
         read_only_fields = ['user',]
+        
 #=============================================
 
 
@@ -44,3 +46,24 @@ class SavingProductWithOptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavingProduct
         fields = '__all__'
+
+
+
+
+
+# ===============================================
+
+class SubscribedProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubscribedProduct
+        fields = '__all__'
+        read_only_fields = ('user',)
+        
+
+
+class UserSubscribedProductsSerializer(serializers.ModelSerializer):
+    subbb = SubscribedProductSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'subbb']

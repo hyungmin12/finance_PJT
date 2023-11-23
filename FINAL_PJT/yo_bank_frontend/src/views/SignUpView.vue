@@ -65,12 +65,12 @@
                 <input type="text"  v-model.trim="money_for_financial" class="signup-text">
               </th>
             </tr>
-            <tr>
+            <!-- <tr>
               <th scope="col" style="background-color: rgb(235, 233, 233);">가용 여행비용</th>
               <th scope="col">
                 <input type="text"  v-model.trim="money_for_travel" class="signup-text">
-              </th>
-            </tr>
+              </th> -->
+            <!-- </tr> -->
             <tr>
               <th scope="col" style="background-color: rgb(235, 233, 233);">평균 급여</th>
               <th scope="col">
@@ -97,7 +97,7 @@ const nickname = ref(null)
 const email = ref(null)
 const age = ref(null)
 const money_for_financial = ref(null)
-const money_for_travel = ref(null)
+const money_for_travel = 0
 const salary = ref(null)
 
 const signUp = function () {
@@ -109,7 +109,7 @@ const signUp = function () {
     email: email.value,
     age: age.value,
     money_for_financial: money_for_financial.value,
-    money_for_travel: money_for_travel.value,
+    money_for_travel: money_for_travel,
     salary : salary.value,
   }
   store.signUp(payload)

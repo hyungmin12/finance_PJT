@@ -16,14 +16,17 @@
       </div>
     </div>
     <form @submit.prevent="createArticle" class="form-container">
-      <div>
-        <input type="text" v-model.trim="title" placeholder="제목을 입력해주세요." class="title" id="title">
-      </div>
-      <div>
-        <textarea v-model.trim="content" placeholder="함께 나누고 싶은 얘기를 남겨주세요." id="content" class="content"></textarea>
-      </div>
-      <input type="submit" value="글쓰기 완료!" class="write">
-    </form>
+  <div class="form-group">
+    <label for="title" class="form-label">제목</label>
+    <input type="text" v-model.trim="title" placeholder="제목을 입력해주세요." class="form-input" id="title">
+  </div>
+  <div class="form-group">
+    <label for="content" class="form-label">내용</label>
+    <textarea v-model.trim="content" placeholder="함께 나누고 싶은 얘기를 남겨주세요." id="content" class="form-textarea"></textarea>
+  </div>
+  <button type="submit" class="form-button">글쓰기 완료!</button>
+</form>
+
   </div>
 </template>
 
@@ -67,24 +70,14 @@ const createArticle = function () {
 
 .form-container {
   position: absolute;
-  top: 110%; /* Adjust as needed */
+  top: 90%; /* Adjust as needed */
   left: 50%; /* Adjust as needed */
   transform: translate(-50%, -50%);
   z-index: 2;
+  width: 1300px;
 }
 
 .carousel-container {
-  position: relative;
-}
-
-.all_box {
-  height: 350px;
-  margin-top: 50px;
-}
-
-.ani_box {
-  width: 1000px;
-  margin: 0 auto;
   position: relative;
 }
 
@@ -99,40 +92,58 @@ const createArticle = function () {
 
 .slogan {
   margin-bottom: 50px;
+  margin-left: 30px;
   line-height: 1.4;
   margin-top: 130px;
 }
 
-.ani_box .slogan {
-  display: inline-block;
-  font-size: 30px;
-  font-weight: 300;
-}
+  /* Add these styles to your existing styles or in a separate style block */
 
-.carousel-inner img {
-  position: absolute;
-  top: 0;
-  z-index: -1;
-  height: auto;
-}
+  .form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+  }
 
-.text-create {
-  text-decoration-line: none;
-}
-.title{
-  width: 500px;
-  margin-bottom: 20px;
-  border-radius: 15px;
-}
-.content{
-  width: 500px;
-  height: 450px;
-  border-radius: 15px;
-}
-.write{
-  position: absolute;
-  margin-top: 20px;
-  left: 80%;
-  color: gray;
-}
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .form-textarea {
+    resize: vertical;
+  }
+
+  .form-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .form-button:hover {
+    background-color: #45a049;
+  }
+
 </style>
