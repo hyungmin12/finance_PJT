@@ -9,7 +9,7 @@ from allauth.account.utils import user_email, user_field, user_username
 class User(AbstractUser):
     username = models.CharField(max_length=30, unique=True)
     nickname = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField(max_length=254, blank=True, null=True)
+    email = models.CharField(max_length=254, blank=True, null=True)
     age = models.IntegerField(default=0)
     used_money_for_financial = models.IntegerField(default=0)
     left_money_for_financial = models.IntegerField(default=1)
@@ -39,9 +39,10 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         used_money_for_financial = data.get("used_money_for_financial") or 0
         left_money_for_financial = data.get("left_money_for_financial") or 1
         salary = data.get("salary")
-        user_email(user, email)
+        # user_email(user, email)
         user_username(user, username)
         user.age = age
+        user.email = email
         user.money_for_financial = money_for_financial
         user.money_for_travel = money_for_travel
         user.nickname = nickname

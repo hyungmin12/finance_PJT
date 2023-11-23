@@ -153,16 +153,21 @@ def save_deposit_data(request):
 def signup_deposit(request, option_pk):
     data = json.loads(request.body.decode('utf-8'))
     user = request.user
+    flag = 0
     depositOption = DepositOptions.objects.get(id=option_pk)
     deposit_product_instance = depositOption.deposit_product
+
     if SubscribedProduct.objects.filter(user_id=user.id, fin_prdt_cd=deposit_product_instance.fin_prdt_cd, save_trm=depositOption.save_trm):
         return Response({'message': 'already'})
     if user.left_money_for_financial == 1:
         user.left_money_for_financial = user.money_for_financial
+    if int(data['amount']) > user.left_money_for_financial:
+        return Response({'message': 'dont have money'})
     if user.money_for_financial != 0 and user.left_money_for_financial - int(data['amount']) >= 0:
         user.used_money_for_financial += int(data['amount'])
         user.left_money_for_financial = user.money_for_financial - user.used_money_for_financial
         user.save()
+        flag=1
         save_data = {
             "type": "D",
             "fin_prdt_cd": deposit_product_instance.fin_prdt_cd,
@@ -178,6 +183,8 @@ def signup_deposit(request, option_pk):
             "intr_rate2": depositOption.intr_rate2,
         }
 
+    if flag==0:
+        save_data = {}    
     serializer = SubscribedProductSerializer(data=save_data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=user)
@@ -839,10 +846,79 @@ def get_saving_recommend(request):
                 result_list.append(result_dic)
         return Response(result_list)
     
+# from rest_framework.renderers import JSONRenderer
+# from rest_framework.parsers import JSONParser
+
+# @api_view(["GET"])
+# def get_my_subscribed(request):
+#     subs = SubscribedProduct.objects.filter(user=request.user)
+#     serializer = SubscribedProductSerializer(subs, many=True)
+#     deposits = []
+#     for sub in subs:
+#         deposit = DepositProduct.objects.get(fin_prdt_cd=sub.fin_prdt_cd)
+#         deposits.append(DepositProductSerializer(deposit).data)
+#     data = [serializer.data,deposits]
+#     return Response(data)
+
+from django.shortcuts import get_list_or_404
+
 @api_view(["GET"])
 def get_my_subscribed(request):
-    print(request.user)
     subs = SubscribedProduct.objects.filter(user=request.user)
+
+    # 리스트가 비어 있으면 404 에러 발생
+    try:
+        get_list_or_404(subs)
+    except:
+        return Response({'msg':'err'})
+
     serializer = SubscribedProductSerializer(subs, many=True)
-    
-    return Response(serializer.data)
+
+    deposits = []
+    for sub in subs:
+        try:
+            deposit = DepositProduct.objects.get(fin_prdt_cd=sub.fin_prdt_cd)
+            deposits.append(DepositProductSerializer(deposit).data)
+        except DepositProduct.DoesNotExist:
+            pass
+            # DepositProduct가 없는 경우에 대한 처리
+            # deposits.append({"message": "DepositProduct does not exist"})
+        try:
+            savings = SavingProduct.objects.get(fin_prdt_cd=sub.fin_prdt_cd)
+            deposits.append(SavingProductSerializer(savings).data)
+        except SavingProduct.DoesNotExist:
+            # DepositProduct가 없는 경우에 대한 처리
+            pass
+            # deposits.append({"message": "DepositProduct does not exist"})
+
+    data = [serializer.data, deposits]
+    return Response(data)
+
+
+
+# @api_view(["POST"])
+# def delete_product(request, subscribed_pk):
+#     # 객체가 존재하지 않으면 404 에러 반환
+#     sub = get_object_or_404(SubscribedProduct, pk=subscribed_pk)
+
+#     # 여기에 삭제 권한 검증 코드 추가
+
+#     # 객체 삭제
+#     sub.delete()
+
+#     return Response({'msg': 'SubscribedProduct deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+@api_view(["POST"])
+def delete_product(request, subscribed_pk):
+    # 객체가 존재하는지 확인
+    subscribed_products = SubscribedProduct.objects.filter(pk=subscribed_pk)
+
+    if subscribed_products.exists():
+        # 여기에 삭제 권한 검증 코드 추가
+
+        # 객체 삭제 (첫 번째 객체만 삭제)
+        subscribed_products.first().delete()
+
+        return Response({'msg': 'SubscribedProduct deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    else:
+        # 객체가 존재하지 않으면 404 에러 반환
+        raise Http404("SubscribedProduct does not exist")

@@ -14,5 +14,6 @@ urlpatterns = [
     path("get_deposit_recommend/", views.get_deposit_recommend),
     path("get_saving_recommend/", views.get_saving_recommend),
     path("get_my_subscribed/", views.get_my_subscribed),
+    path("delete_product/<int:subscribed_pk>", views.delete_product),
 ]
 
