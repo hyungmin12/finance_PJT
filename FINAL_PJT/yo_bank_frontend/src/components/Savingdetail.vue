@@ -1,58 +1,3 @@
-<!-- <template>
-    <tr>
-        <td style="text-align: center;">{{ saving.kor_co_nm }}</td>
-        <td style="text-align: center;">{{ saving.fin_prdt_nm }}</td>
-        <td style="text-align: center;">
-            <button @click="toggleDetails">Toggle Details</button>
-        </td>
-    </tr>
-    <td colspan="3">
-        <div v-if="isShow" style="display: inline-block; width:100%;">
-            <div class="d-flex">
-                
-            </div>
-            <div v-for="option of saving.options" :key="option.save_trm">
-        <hr>
-        <table>
-          <thead>
-            <tr>
-              <th>금융기관</th>
-              <th>상품</th>
-              <th>자세히 보기</th>
-            </tr>
-          </thead>
-          <td>예치기간 : {{ option.save_trm }}</td>
-          <td>저축금리 : {{ option.intr_rate }}</td>
-          <td>우대금리 : {{ option.intr_rate2 }}</td>
-        </table>
-        <form @submit.prevent="signUpThisSaving(option.id)">
-          <input v-model="amount" type="text">
-          <input type="submit" value="가입하기">
-        </form>
-      </div>
-    </div>
-</td>
-</template>
-
-<script setup>
-    import { ref } from 'vue'
-    const isShow = ref(false)
-    defineProps({
-        saving:Object
-    })
-    const toggleDetails = () => {
-    // showDetails.value[depositId] = !showDetails.value[depositId];
-    if (isShow.value) {
-        isShow.value = false
-    } else {
-        isShow.value = 1
-    }
-    };
-</script>
-
-<style scoped>
-
-</style> -->
 
 <template>
   <tr style="border-bottom: solid 1px black;">
@@ -83,7 +28,7 @@
         <span style="text-align: center; width: 25%;">{{ option.intr_rate }}</span>
         <span style="text-align: center; width: 25%;">{{ option.intr_rate2 }}</span>
         <div style="padding-right: 100px;">
-         <form @submit.prevent="signUpThisSaving(option.id)" style="text-align: right; display: inline-block; width: 25%;">
+        <form @submit.prevent="signUpThisSaving(option.id)" style="text-align: right; display: inline-block; width: 25%;">
             <input type="submit" class="btn btn-outline-secondary" value="가입하기">
           </form>
         </div>
@@ -134,6 +79,13 @@ const signUpThisSaving = function (optionPk) {
   .then((res) => {
     amount.value = null
     console.log(res.data);
+    amount.value = null
+    if (res.data.message === "already"){
+      alert("이미 가입한 상품입니다.")
+    }
+    else if(res.data.message === "okay"){
+      alert("상품에 가입 되었습니다.")
+    }
   })
   .catch((err) => {
     console.log(err);

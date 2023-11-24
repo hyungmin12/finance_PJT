@@ -4,27 +4,23 @@
     <table class="table w-35" style="width: 1200px;">
       <thead>
         <tr>
-          <th scope="col" class="notice-board"></th>
-          <th scope="col" class="notice-board"></th>
-          <th scope="col" class="notice-board">조회</th>
-          <th scope="col" class="notice-board">댓글</th>
-          <th scope="col" class="notice-board">작성일</th>
+          <th scope="col" style="width:130px;" class="notice-board"></th>
+          <th scope="col" style="width:300px;" class="notice-board">제목</th>
+          <th scope="col" class="notice-board">내용</th>
+          <!-- <th scope="col" class="notice-board">작성일</th> -->
         </tr>
       </thead>
       <tbody> 
         <!-- v-for="article in store.articles"
         :key="article.id"
         :article="article" -->
-        <tr v-for="article in store.articles"  class="hoverable-row"  @click="router.push({name:'DetailView',params:{id:article.id}})">
-            <th scope="row">{{ article.id }}</th>
+        <tr v-for="(article, index) in store.articles"  class="hoverable-row"  @click="router.push({name:'DetailView',params:{id:article.id}})">
+            <th style="text-align:center;" scope="row">{{ index+1 }}</th>
             <td>{{ article.title }}</td>
             <td>{{ article.content }}</td>
-            <td>{{ article.content }}</td>
-            <td>{{ article.content }}</td>
-            <!-- [Detail] -->
+            <!-- <td>{{ formatCreatedAt(article.created_at) }}</td> -->
         </tr>
         <div>
-    <hr>
   </div>
       </tbody>
     </table>
@@ -35,9 +31,8 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useCounterStore } from '@/stores/counter'
-import { RouterLink, useRouter } from 'vue-router'
-import ArticleList from '@/components/ArticleList.vue'
-import ArticleListItem from '@/components/ArticleListItem.vue'
+import { useRouter } from 'vue-router'
+import { format, parseISO } from 'date-fns';
 
 const store = useCounterStore()
 const router = useRouter()
@@ -46,11 +41,15 @@ onMounted(() => {
   store.getArticles()
 })
 
-defineProps({
-  article: Object
-})
-
-
+const formatCreatedAt = (createdAt) => {
+  try {
+    const parsedDate = parseISO(createdAt);
+    return format(parsedDate, 'yyyy-MM-dd HH:mm:ss');
+  } catch (error) {
+    console.error('Error parsing date:', error);
+    return 'Invalid Date';
+  }
+};
 
 </script>
 

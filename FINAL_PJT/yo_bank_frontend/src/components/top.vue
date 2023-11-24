@@ -11,7 +11,7 @@
             <RouterLink to="/depositandsaving" class="navvar m-5">예적금</RouterLink>
           </li>
           <li v-if="store.isLogin" class="nav-item">
-            <RouterLink to="/community1" class="navvar m-5">금융계시판</RouterLink>
+            <RouterLink to="/community1" class="navvar m-5">금융게시판</RouterLink>
           </li>
           <li v-if="store.isLogin" class="nav-item">
             <RouterLink to="/exchange" class="navvar m-5">환율계산기</RouterLink>
@@ -32,8 +32,6 @@
           <li v-if="!store.isLogin" class="nav-item">
             <RouterLink to="/signup" class="navvar m-5">회원가입</RouterLink>
           </li>
-
-
         </ul>
       </div>
   </div>

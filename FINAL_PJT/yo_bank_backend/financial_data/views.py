@@ -913,14 +913,20 @@ def get_my_subscribed(request):
 #     return Response({'msg': 'SubscribedProduct deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 @api_view(["POST"])
 def delete_product(request, subscribed_pk):
-    # 객체가 존재하는지 확인
     subscribed_products = SubscribedProduct.objects.filter(pk=subscribed_pk)
-
     if subscribed_products.exists():
-        # 여기에 삭제 권한 검증 코드 추가
-
-        # 객체 삭제 (첫 번째 객체만 삭제)
+        price = subscribed_products.first().amount
         subscribed_products.first().delete()
+
+        request.user.used_money_for_financial -= price
+        request.user.left_money_for_financial += price
+        request.user.save()
+        # used_money = 0
+        # subs = SubscribedProduct.objects.filter(user_id=request.user.id)
+        # for sub in subs:
+        #     print(sub.amount, print("========foor============="))
+        # print(used_money,"========user_money===========")
+    
 
         return Response({'msg': 'SubscribedProduct deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     else:
@@ -931,7 +937,6 @@ def delete_product(request, subscribed_pk):
 
 @api_view(['GET'])
 def get_my_deposit(request):
-    print(request.user.id)
     subs = SubscribedProduct.objects.filter(user=request.user)
     ret = {
         'fin_prdt_nm' : [],

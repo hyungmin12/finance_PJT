@@ -27,25 +27,47 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useCounterStore } from '@/stores/counter'
+import { useRouter } from 'vue-router';
 import axios from 'axios'
 
 const store = useCounterStore()
 const my_products = ref(null)
 const deposits = ref([])
+const router = useRouter()
 
-const deleteProduct = function(subscribed_pk) {
-  axios({
-    method: 'post',
-    url: `http://127.0.0.1:8000/financial_data/delete_product/${subscribed_pk}`
-  })
-  .then((res) => {
+const deleteProduct = async function(subscribed_pk) {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: `http://127.0.0.1:8000/financial_data/delete_product/${subscribed_pk}`,
+      headers: {
+        Authorization: `Token ${store.token}`
+      }
+    });
+
     console.log(res.data);
-    getUserData();
-  })
-  .catch((error) => {
+    await getUserData();
+  } catch (error) {
     console.error('Error deleting product:', error);
-  });
+  }
 }
+
+
+// const deleteProduct = function(subscribed_pk) {
+//   axios({
+//     method: 'post',
+//     url: `http://127.0.0.1:8000/financial_data/delete_product/${subscribed_pk}`,
+//     headers: {
+//       Authorization: `Token ${store.token}`
+//     }
+//   })
+//   .then((res) => {
+//     console.log(res.data);
+//   })
+//   .catch((error) => {
+//     console.error('Error deleting product:', error);
+//   });
+// }
 
 const getUserData = async () => {
   await store.getUserInformations();

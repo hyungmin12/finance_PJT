@@ -14,22 +14,19 @@
       </div>
       <div class="text-create" style="text-align: right; margin-top: 20px; margin-right: 178px;">
         <RouterLink :to="{ name: 'CreateView' }" class="text-create">
-          글쓰기
+          <input type="text" style="width:130px;" class="btn btn-outline-secondary" value="글쓰기">
         </RouterLink>
       </div>
     </div>
     <div>
-      <FinanceComponent />
+      <FinanceComponent style="margin-left: 20%;"/>
     </div>
   </div>
 </template>
 
 <script setup>
 import { RouterLink } from 'vue-router'
-import { useCounterStore } from '@/stores/counter'
 import FinanceComponent from '@/components/FinanceComponent.vue'
-
-const store = useCounterStore()
 
 
 
@@ -75,6 +72,6 @@ const store = useCounterStore()
 }
 .text-create{
   text-decoration-line: none;
-
+  margin-right:9%;
 }
 </style>

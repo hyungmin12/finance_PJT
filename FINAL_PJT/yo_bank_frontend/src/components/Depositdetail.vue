@@ -71,7 +71,12 @@ axios({
 })
 .then((res) => {
   amount.value = null
-  console.log(res.data);
+  if (res.data.message === "already"){
+    alert("이미 가입한 상품입니다.")
+  }
+  else if(res.data.message === "okay"){
+    alert("상품에 가입 되었습니다.")
+  }
 })
 .catch((err) => {
   console.log(err);

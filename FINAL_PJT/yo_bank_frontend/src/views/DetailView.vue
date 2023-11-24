@@ -20,8 +20,8 @@
         <p class="text-title"><strong>제목 : {{ article.title }}</strong></p>
         <hr class="hr-line">
         <p class="text">내용 : {{ article.content }}</p>
-        <p class="text">작성일 : {{ article.created_at }}</p>
-        <p class="text">수정일 : {{ article.updated_at }}</p>
+        <p class="text">작성일 : {{ formatDateTime(article.created_at) }}</p>
+        <p class="text">수정일 : {{ formatDateTime(article.updated_at) }}</p>
 
         <button v-if="article.user === userId" @click="updateArticle" class="btn btn-outline-secondary text">수정하기</button>
         <button v-if="article.user === userId" @click="deleteArticle" class="btn btn-outline-secondary text">삭제하기</button>
@@ -57,7 +57,16 @@ const commentContent = ref(null)
 
 const userId = store.userInformations.id
 
-console.log(userId, " =====")
+const formatDateTime = function (dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 1을 더합니다.
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    
+    return `${year}년 ${month}월${day}일 ${hours}시${minutes}분`;
+}
 
 // 
 const createComment = function(){
